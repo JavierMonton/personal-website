@@ -21,7 +21,8 @@ java -Xms256M -Xmx2G -server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:Initiating
 ```
 And you'll find all the directories (after `-cp`) included in the running Kafka Connect. 
 
-Note that a folder called `cp-base-new` is widely used in the Single mode, but not very well documented.
+- Note that a folder called `cp-base-new` is widely used in the Single mode, but not very well documented.
+- Setting your deployment to 1 replicas will run Kafka Connect in Single mode, while setting it to 2 or more will run it in Distributed mode.
 :::
 
 ### Deploying in K8s
@@ -129,7 +130,7 @@ dependencies {
 
 ### Adding libraries
 As mentioned earlier, libraries must go in the class-path, not in the plugins' folder. 
-If you are using a project to build your libraries and plugins, you could use many different plugins to pack all the dependencies into a .jar that you can copy into the Docker image.
+If you are using a project to build your libraries and plugins, you could use many different plugins to pack all the dependencies into a .jar that you can be copied into the Docker image.
 
 For example, with Gradle we could include the AWS library needed for IAM authentication, and the Log4j JSON formatter, like this:
 ```
@@ -244,6 +245,21 @@ Some tips:
 - You can also help Kafka Connect to find the dialect used, by adding another property in your connector's configuration: `dialectName: "PostgreSqlDatabaseDialect"`
 :::
 
+#### META-INF/services and multiple drivers
+At this point, we are including the JDBC PostgreSQL driver and the wrapper in the classpath, both are JDBC Drivers, if we are including different .jar files, everything should be fine,
+but if we are building a fat-jar, we might have some issues. Each one of these drivers is creating a file called `META-INF/services/java.sql.Driver`,
+and they are including the name of the driver in it. If our fat-jar is not merging them to include both classes, we will get an error like `No suitable driver found`.
+
+Depending on the building tool and the plugin used, we might need to add some extra configuration to merge these files. For example, in Gradle we could need to add something like this:
+```
+mergeServiceFiles()
+```
+Or in the SBT Assembly plugin, we could need to add something like:
+```sbt
+assembly / assemblyMergeStrategy := MergeStrategy.concat
+```
+
+
 ### Topic & Destination table
 The JDBC Sink Connector allows us to decide which topics and tables we want to use, and we have two ways of doing it:
 - One topic / table per connector. In this case, we can directly write the topic and table names in the connector's configuration.
@@ -268,13 +284,6 @@ Be aware that not all types accepted in your Kafka topics are accepted in your d
 :::
 ```
 ```
-
-
-
-
-
-
-### Basic configuration
 
 
 
@@ -440,7 +449,6 @@ Then, we can add the group name in our connector's configuration:
 ```yaml
 consumer.override.group.id: "my-custom-group-name"
 ```
-
 
 
 
