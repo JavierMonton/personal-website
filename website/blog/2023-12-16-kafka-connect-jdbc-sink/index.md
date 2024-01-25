@@ -1,7 +1,14 @@
-# From Kafka to an RDS
-Complete guide to move data from Kafka to an RDS using Kafka Connect and the JDBC Sink Connector.
+---
+slug: kafka-connect-jdbc-sink-iam-auth
+title: Kafka Connect - JDBC Sink
+authors: javier
+tags: [Kafka-Connect, JDBC-Sink, Kafka, IAM-Auth, MSK, K8s]
+---
 
-## Kafka Connect deployment
+# From Kafka to an RDS
+A guide to move data from Kafka to an AWS RDS using Kafka Connect and the JDBC Sink Connector and IAM Auth.
+
+## Kafka Connect
 For these examples, we are using the Confluent's Kafka Connect on its Docker version, as we are going to deploy it in a Kubernetes cluster.
 
 ### Single and distributed modes
@@ -9,7 +16,7 @@ For these examples, we are using the Confluent's Kafka Connect on its Docker ver
 Kafka Connect comes with two modes of execution, single and distributed. The main difference between them is that the single mode runs all the connectors in the same JVM, while the distributed mode runs each connector in its own JVM. The distributed mode is the recommended one for production environments, as it provides better scalability and fault tolerance. 
 In the case of K8s, it means we will be using more than one pod to run Kafka Connect.
 
-:::warn
+:::warning
 Be aware that these two modes are using different class paths, so if you are doing changes inside the docker and you are running the single mode in local but distributed in production, you might have different results.
 I strongly recommend to check manually which are the class paths in each case using something like 
 ```bash
@@ -99,7 +106,7 @@ Confluent will tell you that you can modify the template for logs in `/etc/confl
 
 If you want to format everything to JSON, I would recommend to enter inside the docker image, look for those files, and change them as desired. Your Dockerfile could then replace them while creating the image.
 
-:::warn
+:::warning
 There are still some logs during the start-up not formatted as JSON. Confluent's Kafka Connect is using a [Python script to start up the service](https://github.com/confluentinc/confluent-docker-utils/blob/master/confluent/docker_utils/cub.py), 
 and that service is using some `prints` that does not belong to any Log4j, so they are not formatted in any way.
 
@@ -130,7 +137,7 @@ dependencies {
 
 ### Adding libraries
 As mentioned earlier, libraries must go in the class-path, not in the plugins' folder. 
-If you are using a project to build your libraries and plugins, you could use many different plugins to pack all the dependencies into a .jar that you can be copied into the Docker image.
+If you are using a project to build your libraries and plugins, you could use many different plugins to pack all the dependencies into a .jar that can be copied into the Docker image.
 
 For example, with Gradle we could include the AWS library needed for IAM authentication, and the Log4j JSON formatter, like this:
 ```
@@ -292,7 +299,7 @@ Deploying new connectors can be tricky, specially if you are using Kubernetes. K
 
 Ideally, we would want to have a configuration file in our repository, that can be updated and automatically deployed during our CI.
 
-### Using the connect-operator
+## connect-operator
 
 There is a solution for this, the Confluent's [connect-operator](https://github.com/confluentinc/streaming-ops/tree/main/images/connect-operator), although the solution is not very robust, is does the job.
 
@@ -307,12 +314,12 @@ it can be in the same namespace or not. It also can listen for config-maps attac
 all depends on our configuration and K8s permissions.
 :::
 
-:::warn
+:::warning
 The `connect-operator` is a nice tool that does the job, but it isn't very robust. For example, it does not check if a connector creation has failed or not, it only checks if the connector exists or not, sends a `curl` to the REST API, and then it assumes that everything is fine.
 In any case, it is just a bash script using JQ for configuration, so it can be easily modified to fit our needs.
 :::
 
-#### Configuring the connect-operator
+### Configuring the connect-operator
 As the `connect-operator` is based on the `shell-operator`, it expects a configuration file in YAML format, where we can define the events we want to listen to.
 
 By default, the operator is called in two ways:
@@ -320,7 +327,7 @@ By default, the operator is called in two ways:
 - At startup, it will be called with a flag `--config` and it has to return the configuration file in YAML format that specifies the events we want to listen to.
 - When an event is triggered, our script will be triggered with the event as a parameter.
 
-##### Listening to config maps
+### Listening to config maps
 The config that we have to return to listen for config map changes should se something similar to this:
 ```yaml
 configVersion: v1
@@ -347,7 +354,7 @@ The default `connect-operator` has a config to enable or disable the connector, 
 The configuration looks different from a standard K8s configuration, but the `shell-operator` can handle it and **there is no need to declare a new [CRD](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/) with that structure.**
 :::
 
-##### Config Map
+### Config Map
 The config map must have the connectors configuration in JSON, in the same way you will use it in the REST API. 
 I would suggest to build a Helm template for config maps, so you can write your connectors configuration in YAML and then convert it to JSON using Helm.
 
@@ -392,7 +399,32 @@ The config-map can be attached to your Kafka Connect deployment, or to any other
 
 Once it is deployed as a config-map, the `connect-operator` will create the connector for us.
 
-##### RBAC permissions to read config maps
+### Replacing variables
+The `connect-operator` uses `jq` to replace variables, they can be stored in some config files inside the docker, passed as arguments or as environment variables.
+Having them inside config files inside the Docker images looks weird to me, why our operator should know about the context of our connectors?
+
+These are some examples of replacing variables, but you can find more details in the `jq` documentation:
+
+Variables:
+```yaml
+connection.user: $username
+```
+
+Environment variables:
+```yaml
+connection.user: env.USERNAME
+```
+Note that they are not between quotes.
+
+Variables inside strings:
+```yaml
+connection.user: "prefix_\(env.USERNAME)_suffix"
+```
+
+
+
+
+### RBAC permissions to read config maps
 If your `connect-operator` stays in a different deployment than the config-map, you will need to give it permissions to read the config map. This can be achieved using a Role and a RoleBinding using Helm.
 
 Something like this needs to be created:
@@ -429,7 +461,7 @@ roleRef:
 ```
 
 
-### Custom Kafka groups for your connectors
+## Custom Kafka groups for your connectors
 
 By default, Kafka Connect will create a group for each connector, and it will use the connector's name as the group name, with `connect-` as prefix.
 This is not very flexible, as we might want to have our own group names. For example, if we are sharing K8s clusters with other teams, 
