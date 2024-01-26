@@ -420,6 +420,9 @@ Variables inside strings:
 ```yaml
 connection.user: "prefix_\(env.USERNAME)_suffix"
 ```
+:::tip
+If you are parsing this with Helm, you might need to have the string between single quotes, otherwise Helm will fail on `\(`
+:::
 
 
 
