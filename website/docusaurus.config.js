@@ -20,8 +20,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
+  organizationName: 'JavierMonton', // Usually your GitHub org/user name.
+  projectName: 'blog', // Usually your repo name.
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -54,7 +54,7 @@ const config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/JavierMonton/blog/edit/main/website',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -85,7 +85,7 @@ const config = {
            */
           {to: '/blog', label: 'Blog', position: 'left'},
           {
-            href: 'https://github.com/facebook/docusaurus',
+            href: 'https://github.com/JavierMonton/blog',
             label: 'GitHub',
             position: 'right',
           },
@@ -95,41 +95,45 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: 'Docs',
+            title: 'Blog',
             items: [
               {
-                label: 'Tutorial',
-                to: '/docs/intro',
+                label: 'Blog',
+                to: '/blog',
               },
             ],
           },
           {
-            title: 'Community',
+            title: 'Find me',
             items: [
               {
-                label: 'Stack Overflow',
-                href: 'https://stackoverflow.com/questions/tagged/docusaurus',
+                label: 'GitHub',
+                href: 'https://github.com/JavierMonton',
               },
               {
-                label: 'Discord',
-                href: 'https://discordapp.com/invite/docusaurus',
+                label: 'Stack Overflow',
+                href: 'https://stackoverflow.com/users/7041871/javier-mont%c3%b3n',
+              },
+              {
+                label: 'LinkedIn',
+                href: 'https://www.linkedin.com/in/javiermonton/',
               },
               {
                 label: 'Twitter',
-                href: 'https://twitter.com/docusaurus',
+                href: 'https://twitter.com/javier_monton',
               },
             ],
           },
           {
-            title: 'More',
+            title: 'Open Source',
             items: [
               {
                 label: 'Blog',
                 to: '/blog',
               },
               {
-                label: 'GitHub',
-                href: 'https://github.com/facebook/docusaurus',
+                label: 'Big-Data-Types',
+                href: 'https://data-tools.github.io/big-data-types/',
               },
             ],
           },
