@@ -6,7 +6,7 @@ tags: [Kafka-Connect, JDBC-Sink, Kafka, IAM-Auth, MSK, K8s]
 ---
 
 # From Kafka to an RDS
-A guide to move data from Kafka to an AWS RDS using Kafka Connect and the JDBC Sink Connector and IAM Auth.
+A guide to move data from Kafka to an AWS RDS using Kafka Connect and the JDBC Sink Connector with IAM Auth.
 
 ## Kafka Connect
 For these examples, we are using the Confluent's Kafka Connect on its Docker version, as we are going to deploy it in a Kubernetes cluster.
@@ -289,7 +289,11 @@ But, it's likely that we use a pattern for our topics, specially if we are build
 :::tip
 Be aware that not all types accepted in your Kafka topics are accepted in your database, JDBC Driver and/or the JDBC Sink. For example, the list of valid types from the perspective of the [JDBC Sink are here](https://github.com/confluentinc/kafka-connect-jdbc/blob/master/src/main/java/io/confluent/connect/jdbc/dialect/PostgreSqlDatabaseDialect.java#L299).
 :::
+
+### Case insensitive
+By default, the JDBC Sink will use quotes for all table and column names, thi is usually fine, but PostgeSQL is case insensitive if quotes are not used, so if your data from Kafka comes with uppercase letters, for example, if you are using `camelCase`, but if you are not using quotes in your database, or you do not want to use them while querying, you should dissable quotes in Kafka Connect with:
 ```
+quote.sql.identifiers=never
 ```
 
 

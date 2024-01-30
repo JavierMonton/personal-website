@@ -8,8 +8,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'My Site',
-  tagline: 'Dinosaurs are cool',
+  title: 'Personal website',
+  tagline: 'Programming, technology, and other stuff.',
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
@@ -69,10 +69,10 @@ const config = {
       // Replace with your project's social card
       image: 'img/docusaurus-social-card.jpg',
       navbar: {
-        title: 'My Site',
+        title: 'Home',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/logo.svg',
+          src: 'img/wheel1.svg',
         },
         items: [
           /*
@@ -82,7 +82,8 @@ const config = {
             position: 'left',
             label: 'Tutorial',
           },
-           */
+          */
+          {to: '/docs/cv', label: 'About Me', position: 'left'},
           {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/JavierMonton/blog',
@@ -104,7 +105,7 @@ const config = {
             ],
           },
           {
-            title: 'Find me',
+            title: 'About me',
             items: [
               {
                 label: 'GitHub',
@@ -138,7 +139,7 @@ const config = {
             ],
           },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
+        copyright: `Copyright © ${new Date().getFullYear()}. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
