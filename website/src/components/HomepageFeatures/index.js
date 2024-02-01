@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 const FeatureList = [
   {

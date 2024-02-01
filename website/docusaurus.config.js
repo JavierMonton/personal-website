@@ -83,7 +83,7 @@ const config = {
             label: 'Tutorial',
           },
           */
-          {to: '/docs/cv', label: 'About Me', position: 'left'},
+          {to: '/cv', label: 'CV', position: 'left'},
           {to: '/blog', label: 'Blog', position: 'left'},
           {
             href: 'https://github.com/JavierMonton/blog',
@@ -118,6 +118,10 @@ const config = {
               {
                 label: 'LinkedIn',
                 href: 'https://www.linkedin.com/in/javiermonton/',
+              },
+              {
+                label: 'CV',
+                href: 'cv',
               },
               {
                 label: 'Twitter',
