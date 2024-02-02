@@ -1,60 +1,126 @@
-import {GitHub, Terminal, TerminalRounded, TerminalSharp, TerminalTwoTone, WorkHistory} from "@mui/icons-material";
+import {
+    Analytics,
+    ArrowUpward, DataObject, DataThresholding, FileCopy,
+    GitHub, Google, Hexagon, Hive, Php,
+    Terminal,
+    TerminalRounded,
+    TerminalSharp,
+    TerminalTwoTone,
+    WorkHistory
+} from "@mui/icons-material";
 
-import { VerticalTimeline, VerticalTimelineElement }  from 'react-vertical-timeline-component';
+import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
 import StarIcon from '@mui/icons-material/Star';
+import {Button, Chip, LinearProgress} from "@mui/material";
+import {
+    AmazonwebservicesOriginal,
+    ApachekafkaOriginal,
+    ApachePlain,
+    GooglecloudOriginal,
+    GooglecloudPlain,
+    GooglePlain,
+    JavaOriginal,
+    JavascriptOriginal,
+    KubernetesPlain,
+    MongodbOriginal,
+    MysqlOriginal,
+    PhpOriginal,
+    RedisOriginal,
+    ScalaOriginal,
+    ScalaPlain,
+    TerraformOriginal
+} from "devicons-react";
 
 
-<VerticalTimeline>
+
+<VerticalTimeline
+    className="vertical-timeline-custom-line"
+    lineColor={'#e7e7e7'}
+>
+
     <VerticalTimelineElement
         className="vertical-timeline-element--work first"
-        contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+        contentArrowStyle={{borderRight: '7px solid  rgb(33, 150, 243)'}}
         date="2022 - Present"
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        icon={<WorkIcon />}
+        iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
+        icon={<WorkIcon/>}
     >
         <h3 className="vertical-timeline-element-title">Senior Software Engineer</h3>
         <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://ef.com"}>EF, Education First</a></h4>
         <p>
-            Kafka, Kafka Streams, Kafka Connect, Schema Registry, Streaming Datalake, Scala, K8s, Terraform, AWS.
+            Building an streaming data platform
+        </p>
+        <p>
+            <Chip icon={<ScalaOriginal />} label="Scala" variant="outlined" />
+            <Chip icon={<ApachekafkaOriginal />} label="Kafka" variant="outlined" />
+            <Chip icon={<ApachekafkaOriginal />} label="Kafka Streams" variant="outlined" />
+            <Chip icon={<ApachekafkaOriginal />} label="Kafka Connect" variant="outlined" />
+            <Chip icon={<ApachekafkaOriginal />} label="Schema Registry" variant="outlined" />
+            <Chip label="Protobuf" variant="outlined" />
+            <Chip icon={<KubernetesPlain />} label="K8s" variant="outlined" />
+            <Chip icon={<TerraformOriginal />} label="Terraform" variant="outlined" />
+            <Chip icon={<AmazonwebservicesOriginal />} label="AWS" variant="outlined" />
         </p>
     </VerticalTimelineElement>
     <VerticalTimelineElement
         className="vertical-timeline-element--work"
         date="2020 - 2022 (2 years 7 months)"
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        icon={<WorkIcon />}
+        iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
+        icon={<WorkIcon/>}
     >
         <h3 className="vertical-timeline-element-title">Senior Software/Data Engineer</h3>
-        <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://typeform.com"}>Typeform S.L.</a></h4>
+        <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://typeform.com"}>Typeform
+            S.L.</a></h4>
         <p>
-            Kafka, Kafka Streams, Kafka Connect, Scala, K8s, Spark, DynamoDB, Redshift, Athena, Glue, AWS.
+            <Chip icon={<ScalaOriginal />} label="Scala" variant="outlined" />
+            <Chip icon={<ApachekafkaOriginal />} label="Kafka" variant="outlined" />
+            <Chip icon={<ApachekafkaOriginal />} label="Kafka Streams" variant="outlined" />
+            <Chip label="Spark" variant="outlined" />
+            <Chip icon={<KubernetesPlain />} label="K8s" variant="outlined" />
+
+            <Chip icon={<KubernetesPlain />} label="K8s" variant="outlined" />
+            <Chip icon={<TerraformOriginal />} label="Terraform" variant="outlined" />
+            <Chip icon={<AmazonwebservicesOriginal />} label="AWS" variant="outlined" />
+            <Chip icon={<AmazonwebservicesOriginal />} label="DynamoDB" variant="outlined" />
+            <Chip icon={<AmazonwebservicesOriginal />} label="Athena" variant="outlined" />
+            <Chip icon={<AmazonwebservicesOriginal />} label="Glue" variant="outlined" />
         </p>
     </VerticalTimelineElement>
     <VerticalTimelineElement
         className="vertical-timeline-element--open-source"
         date="2020 - Present"
-        iconStyle={{ background: '#33bb0c', color: '#fff' }}
-        icon={<GitHub />}
+        iconStyle={{background: '#33bb0c', color: '#fff'}}
+        icon={<GitHub/>}
     >
         <h3 className="vertical-timeline-element-title">Open Source library: big-data-types</h3>
         <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://data-tools.github.io/big-data-types/"}>GitHub</a></h4>
         <p>
-            Scala library for type-safe type conversions.
+            Working on a Scala library for type-safe type conversions.
+        </p>
+        <p>
+            <Chip icon={<ScalaOriginal />} label="Scala 2" variant="outlined" />
+            <Chip icon={<ScalaOriginal />} label="Scala 3" variant="outlined" />
         </p>
     </VerticalTimelineElement>
     <VerticalTimelineElement
         className="vertical-timeline-element--work"
         date="2017 - 2020 (2 years 7 months)"
-        iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-        icon={<WorkIcon />}
+        iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
+        icon={<WorkIcon/>}
     >
         <h3 className="vertical-timeline-element-title">Tech Lead / Data Engineer</h3>
         <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://brokergenius.com/"}>Broker Genius</a></h4>
         <p>
-            GCloud, PubSub, BigQuery, Scala, Spark, K8s, DBT.
+            <Chip icon={<ScalaOriginal />} label="Scala" variant="outlined" />
+            <Chip icon={<GooglecloudOriginal />} label="GCloud" variant="outlined" />
+            <Chip icon={<GooglecloudOriginal />} label="PubSub" variant="outlined" />
+            <Chip icon={<GooglecloudOriginal />} label="BigQuery" variant="outlined" />
+            <Chip label="Spark" variant="outlined" />
+            <Chip icon={<KubernetesPlain />} label="K8s" variant="outlined" />
+            <Chip label="DBT" variant="outlined" />
         </p>
     </VerticalTimelineElement>
     <VerticalTimelineElement
@@ -78,7 +144,15 @@ import StarIcon from '@mui/icons-material/Star';
         <h3 className="vertical-timeline-element-title">Senior Data Engineer</h3>
         <h4 className="vertical-timeline-element-subtitle"><a>DataDreams</a></h4>
         <p>
-            Hadoop, Kafka, Spark, Hive, ElasticSearch, MongoDB, Machine Learning, Scala.
+            <Chip icon={<ScalaOriginal />} label="Scala" variant="outlined" />
+            <Chip icon={<JavaOriginal />} label="Java" variant="outlined" />
+            <Chip label="Hadoop" variant="outlined" />
+            <Chip icon={<ApachekafkaOriginal />} label="Kafka" variant="outlined" />
+            <Chip icon={<GooglecloudOriginal />} label="Spark" variant="outlined" />
+            <Chip icon={<Hive />} label="Hive" variant="outlined" />
+            <Chip label="ElasticSearch" variant="outlined" />
+            <Chip icon={<MongodbOriginal />} label="MongoDB" variant="outlined" />
+            <Chip icon={<LinearProgress />} label="Machine Learning" variant="outlined" />
         </p>
     </VerticalTimelineElement>
     <VerticalTimelineElement
@@ -90,7 +164,12 @@ import StarIcon from '@mui/icons-material/Star';
         <h3 className="vertical-timeline-element-title">Software Architect / Backend developer</h3>
         <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://privalia.com/"}>Privalia</a></h4>
         <p>
-            DDD, PHP, JS, Redis, Memcached, ElasticSearch, RDS.
+            <Chip icon={<PhpOriginal />} label="PHP" variant="outlined" />
+            <Chip icon={<JavascriptOriginal />} label="JS" variant="outlined" />
+            <Chip icon={<Hexagon />} label="DDD" variant="outlined" />
+            <Chip icon={<RedisOriginal />} label="Redis" variant="outlined" />
+            <Chip label="ElasticSearch" variant="outlined" />
+            <Chip icon={<MysqlOriginal />} label="RDS" variant="outlined" />
         </p>
     </VerticalTimelineElement>
     <VerticalTimelineElement
@@ -104,6 +183,11 @@ import StarIcon from '@mui/icons-material/Star';
         <p>
             Web development on spare time for some clients.
         </p>
+        <p>
+            <Chip icon={<PhpOriginal />} label="PHP" variant="outlined" />
+            <Chip icon={<JavascriptOriginal />} label="JS" variant="outlined" />
+            <Chip icon={<MysqlOriginal />} label="RDS" variant="outlined" />
+        </p>
     </VerticalTimelineElement>
 
     <VerticalTimelineElement
@@ -115,7 +199,12 @@ import StarIcon from '@mui/icons-material/Star';
         <h3 className="vertical-timeline-element-title">Software developer</h3>
         <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://www.onetechteam.com/"}>OneTechTeam S.L.</a></h4>
         <p>
-            Web development, PHP, JS.
+            Web development
+        </p>
+        <p>
+            <Chip icon={<PhpOriginal />} label="PHP" variant="outlined" />
+            <Chip icon={<JavascriptOriginal />} label="JS" variant="outlined" />
+            <Chip icon={<MysqlOriginal />} label="RDS" variant="outlined" />
         </p>
     </VerticalTimelineElement>
 
@@ -133,7 +222,7 @@ import StarIcon from '@mui/icons-material/Star';
     </VerticalTimelineElement>
 
     <VerticalTimelineElement
-        iconStyle={{ background: 'rgb(16, 204, 82)', color: '#fff' }}
-        icon={<StarIcon />}
+        iconStyle={{background: 'rgb(161,131,8)', color: '#fff'}}
+        icon={<ArrowUpward/>}
     />
 </VerticalTimeline>

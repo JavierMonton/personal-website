@@ -5,6 +5,9 @@ authors: javier
 tags: [Scala, Spark, Big-query, Cassandra, Circe, type-class, type-safe, type-derivation, type-level-programming]
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Scala Big Data Types Library
 
 Big Data Types is a library that can safely convert types between different Big Data systems.
@@ -124,6 +127,130 @@ and [here for Scala 3](https://github.com/data-tools/big-data-types/blob/main/co
 
 ## Implementing a new type
 
+In order to implement a new type, we need to implement the conversion from and to `Generic` type. There is a complete guide, step by step, with examples, in the [official documentation](https://data-tools.github.io/big-data-types/docs/Contributing/CreateNewType)
+
+
+A quick example, let's say we want to implement a new type called `MyType`. We need to implement the conversion `MyType -> Generic` and `Generic -> MyType`.
+:::tip
+Both conversions are not strictly needed, if we only need to use `Scala -> MyType` we only need to implement `Generic -> MyType`
+because the library already has the conversion `Scala -> Generic`. The same happens with other types, like `BigQuery -> MyType` will also be ready automatically.
+:::
+
+To do that, we need a type-class that works with our type. This will be different depending on the type we want to implement.
+For example:
+```scala
+trait GenericToMyType[A] {
+  def getType: MyTypeObject
+}
+```
+Maybe our type works with a List at the top level, like Spark does, so instead, we will do:
+```scala
+trait GenericToMyType[A] {
+  def getType: List[MyTypeObject]
+}
+```
+:::tip
+`getType` can be renamed to anything meaningful, like `toMyType` or `myTypeSchema`
+:::
+
+And we need to implement this type-class for all the (Generic) `SqlType` types:
+<Tabs>
+    <TabItem value="Scala2" label="Scala 2" default>
+        ```scala
+        implicit val genericToMyTypeForInt: GenericToMyType[SqlInt] = new GenericToMyType[SqlInt] {
+          override def getType: MyTypeObject = MyIntType
+        }
+        ```
+    </TabItem>
+    <TabItem value="Scala3" label="Scala 3" default>
+        ```scala
+        given GenericToMyType[SqlInt] = new GenericToMyType[SqlInt] {
+            override def getType: MyTypeObject = MyIntType
+        }
+        ```
+    </TabItem>
+</Tabs>
+
+## Using conversions
+
+The defined type-classes allow you to convert `MyType -> Generic` by doing this:
+```scala
+val int: SqlInt = SqlTypeConversion[MyIntType].getType
+```
+And `Generic -> MyType` by doing this:
+```scala
+val int: MyIntType = SqlTypeToBigQuery[SqlInt].getType
+```
+
+This can work well when we work this `case classes` and we don't have an instance of them. For example, a `case class` definition can be converted into a `BigQuery` Schema, ready to be used for table creation.
+
+But, sometimes, our types work with instances rather than definitions, and we need to use them to convert to other types. 
+
+There is another type-class on all implemented types that allows to work with instances. In general, this type-class can be implemented using code from the other, but this one expects an argument of the type we want to convert to.
+```scala
+trait SqlInstanceToMyType[A] {
+  def myTypeSchema(value: A): MyTypeObject
+}
+```
+
+Implementing this type class allows to use the conversion like this:
+```scala
+val mySchema: MyTypeObject = SqlInstanceToMyType.myTypeSchema(theOtherType)
+```
+
+But these syntaxis are not very friendly, and we can use extension methods to make it more readable.
+
+## Extension methods
+Extension methods in Scala 2 are done through implicit classes and allow us to create new methods for existing types.
+
+In the library, we implement extension methods for `Generic -> SpecificType` and the interesting part, again, is that we don't need to implement `A -> B` directly, the compiler can derive it for us.
+
+<Tabs>
+    <TabItem value="Scala2" label="Scala 2" default>
+        ```scala
+          implicit class InstanceSyntax[A: SqlInstanceToMyType](value: A) {
+            def asMyType: MyTypeObject = SqlInstanceToMyType[A].myTypeSchema(value)
+          }
+        ```
+    </TabItem>
+    <TabItem value="Scala3" label="Scala 3" default>
+        ```scala
+          extension[A: SqlInstanceToMyType](value: A) {
+            def asMyType: MyTypeObject = SqlInstanceToMyType[A].myTypeSchema(value)
+          }
+        ```
+    </TabItem>
+</Tabs>
+
+
+and suddenly, we can use the conversion like this:
+```scala
+val mySchema: MyTypeObject = theOtherType.asMyType
+```
+
+And this is a syntax that can be easier to use. For example, if we work with Spark and BigQuery, we can do the following:
+```scala
+val sparkDf: DataFrame = ???
+val bigQuerySchema = sparkDf.schema.asBigQuery
+```
+
+
 ## More types to come
 
+The library has only a few types implemented (BigQuery, Spark, Cassandra and Circe) but implementing a new type is fairly easy and it gets automatically methods that can be used to convert it into any other type already implemented. 
+As this grows, the number of conversions grows exponentially, and the library becomes more powerful.
 
+Some types that could be potentially implemented:
+- Avro
+- Parquet
+- Athena (AWS)
+- Redshift (AWS)
+- Snowflake
+- RDS (relational databases)
+- Protobuf
+- ElasticSearch templates
+- ...
+
+Some types could have some restrictions, but they could be implemented in a different way, for example, 
+a type conversion could be implemented as a `String` conversion, being the string a "Create table" statement for a specific database 
+and automatically any other type could be printed as a "Create table" statement.

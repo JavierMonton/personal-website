@@ -129,7 +129,7 @@ For example, we could build a main project that can build the Kafka Connect imag
 :::
 
 If you build a project like that, in order to add the JDBC plugin, for example, in Gradle you only need to add this:
-```
+```kotlin
 dependencies {
     implementation("io.confluent:kafka-connect-jdbc:10.7.4")
 }
@@ -140,7 +140,7 @@ As mentioned earlier, libraries must go in the class-path, not in the plugins' f
 If you are using a project to build your libraries and plugins, you could use many different plugins to pack all the dependencies into a .jar that can be copied into the Docker image.
 
 For example, with Gradle we could include the AWS library needed for IAM authentication, and the Log4j JSON formatter, like this:
-```
+```kotlin
 dependencies {
     implementation("software.amazon.msk:aws-msk-iam-auth:1.1.7")
     implementation("net.logstash.log4j:jsonevent-layout:1.7")
@@ -193,7 +193,7 @@ This class will need to be packed with your libraries and included in the class 
 We need to download the plugin and add it inside the plugins folder. By default, it's `/usr/share/confluent-hub-components/`. 
 
 You can get the .jar with `wget` and copy it inside the Docker image, in the aforementioned folder. Or, as suggested earlier, if you are building a project using a building tool, like Gradle, you can use Maven to download all the plugins you might need. We only need to add the dependency:
-```
+```kotlin
 dependencies {
     implementation("io.confluent:kafka-connect-jdbc:10.7.4")
 }
@@ -213,7 +213,7 @@ They are placed in `/usr/share/confluent-hub-components/`, but as we can see usi
 I would go for the third option, that gives us more flexibility about which version of the driver we want to use. 
 
 So, we can download the driver and pack it with our libraries, and then copy it inside the Docker image:
-```
+```kotlin
 implementation("org.postgresql:postgresql:42.7.1")
 ```
 
@@ -232,7 +232,7 @@ To use IAM Auth, we only need to add this driver to the classpath, and change a 
 
 
 Add the dependency (also needed libraries for AWS RDS):
-```
+```kotlin
 implementation("com.github.awslabs:aws-advanced-jdbc-wrapper:2.3.2")
 implementation("software.amazon.awssdk:rds:2.20.145")
 ```
@@ -364,7 +364,7 @@ I would suggest to build a Helm template for config maps, so you can write your 
 
 
 Something like this should work in Helm:
-```yaml
+```gotemplate
 {{- if .Values.configMap }}
 apiVersion: v1
 kind: ConfigMap
