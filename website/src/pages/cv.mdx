@@ -1,11 +1,6 @@
 import {
-    Analytics,
-    ArrowUpward, DataObject, DataThresholding, FileCopy,
-    GitHub, Google, Hexagon, Hive, Php,
-    Terminal,
-    TerminalRounded,
-    TerminalSharp,
-    TerminalTwoTone,
+    ArrowUpward,
+    GitHub, Hexagon, Hive,
     WorkHistory
 } from "@mui/icons-material";
 
@@ -13,15 +8,11 @@ import {VerticalTimeline, VerticalTimelineElement} from 'react-vertical-timeline
 import 'react-vertical-timeline-component/style.min.css';
 import SchoolIcon from '@mui/icons-material/School';
 import WorkIcon from '@mui/icons-material/Work';
-import StarIcon from '@mui/icons-material/Star';
-import {Button, Chip, LinearProgress} from "@mui/material";
+import {Chip, LinearProgress} from "@mui/material";
 import {
     AmazonwebservicesOriginal,
     ApachekafkaOriginal,
-    ApachePlain,
     GooglecloudOriginal,
-    GooglecloudPlain,
-    GooglePlain,
     JavaOriginal,
     JavascriptOriginal,
     KubernetesPlain,
@@ -30,7 +21,6 @@ import {
     PhpOriginal,
     RedisOriginal,
     ScalaOriginal,
-    ScalaPlain,
     TerraformOriginal
 } from "devicons-react";
 
@@ -51,7 +41,7 @@ import {
         <h3 className="vertical-timeline-element-title">Senior Software Engineer</h3>
         <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://ef.com"}>EF, Education First</a></h4>
         <p>
-            Building an streaming data platform
+            Building a streaming data platform
         </p>
         <p>
             <Chip icon={<ScalaOriginal />} label="Scala" variant="outlined" />
@@ -79,8 +69,6 @@ import {
             <Chip icon={<ApachekafkaOriginal />} label="Kafka" variant="outlined" />
             <Chip icon={<ApachekafkaOriginal />} label="Kafka Streams" variant="outlined" />
             <Chip label="Spark" variant="outlined" />
-            <Chip icon={<KubernetesPlain />} label="K8s" variant="outlined" />
-
             <Chip icon={<KubernetesPlain />} label="K8s" variant="outlined" />
             <Chip icon={<TerraformOriginal />} label="Terraform" variant="outlined" />
             <Chip icon={<AmazonwebservicesOriginal />} label="AWS" variant="outlined" />

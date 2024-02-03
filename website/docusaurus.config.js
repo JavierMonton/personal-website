@@ -21,7 +21,7 @@ const config = {
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'JavierMonton', // Usually your GitHub org/user name.
-  projectName: 'blog', // Usually your repo name.
+  projectName: 'personal-website', // Usually your repo name.
   trailingSlash: false,
 
   onBrokenLinks: 'throw',
@@ -122,7 +122,7 @@ const config = {
               },
               {
                 label: 'CV',
-                href: 'cv',
+                href: '/cv',
               },
               {
                 label: 'Twitter',
