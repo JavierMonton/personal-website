@@ -28,92 +28,86 @@
   --ifm-color-primary-lighter: #48a9f5;
   --ifm-color-primary-lightest: #70bbf7;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+}
 
-  .vertical-timeline-element--education .vertical-timeline-element-content {
+[data-theme='dark'] .vertical-timeline-element--education .vertical-timeline-element-content {
     border-top: 3px solid #e91e63;
     background-color: #353942;
   }
-  .vertical-timeline-element--education .vertical-timeline-element-content {
+[data-theme='dark'] .vertical-timeline-element--education .vertical-timeline-element-content {
     -webkit-box-shadow: 0 3px 0 #930939 !important;
     box-shadow: 0 3px 0 #930939 !important;
   }
 
-  .vertical-timeline-element--work .vertical-timeline-element-content {
+[data-theme='dark'] .vertical-timeline-element--work .vertical-timeline-element-content {
     border-top: 3px solid #2196f3;
     background-color: #353942;
   }
-  .vertical-timeline-element--work .vertical-timeline-element-content a {
+[data-theme='dark'] .vertical-timeline-element--work .vertical-timeline-element-content a {
     color: #2196f3;
   }
-  .vertical-timeline-element--work .vertical-timeline-element-content {
+[data-theme='dark'] .vertical-timeline-element--work .vertical-timeline-element-content {
     -webkit-box-shadow: 0 3px 0 #1c3c91 !important;
     box-shadow: 0 3px 0 #1c3c91 !important;
   }
 
-  .vertical-timeline-element-content-arrow {
+[data-theme='dark'] .vertical-timeline-element-content-arrow {
     border-right: 7px solid #353942 !important;
   }
 
-  .vertical-timeline-element--open-source .vertical-timeline-element-content {
+[data-theme='dark'] .vertical-timeline-element--open-source .vertical-timeline-element-content {
     border-top: 3px solid #33bb0c;
     background-color: #353942;
   }
-  .vertical-timeline-element--open-source .vertical-timeline-element-content a {
+[data-theme='dark'] .vertical-timeline-element--open-source .vertical-timeline-element-content a {
     color: #33bb0c;
   }
-  .vertical-timeline-element--open-source .vertical-timeline-element-content {
+[data-theme='dark'] .vertical-timeline-element--open-source .vertical-timeline-element-content {
     -webkit-box-shadow: 0 3px 0 #208603 !important;
     box-shadow: 0 3px 0 #208603 !important;
   }
   /* Chips */
-  .vertical-timeline-element-content .MuiChip-root{
+[data-theme='dark'] .vertical-timeline-element-content .MuiChip-root{
     margin-right: 4px;
     margin-bottom: 4px;
     background-color: #454754;
     color: #fff;
   }
-
-}
 /* Light */
-[data-theme='light'] {
-  .vertical-timeline-element--work .vertical-timeline-element-content {
-    border-top: 3px solid #2196f3;
-    background-color: #f3f3f3;
-  }
+.vertical-timeline-element--work .vertical-timeline-element-content {
+  border-top: 3px solid #2196f3;
+  background-color: #f3f3f3;
+}
+/* Chips */
+.vertical-timeline-element-content .MuiChip-root {
+  margin-right: 4px;
+  margin-bottom: 4px;
+  background-color: #f3f3f3;
+}
 
-  /* Chips */
+.vertical-timeline-element--work .vertical-timeline-element-content a {
+  color: #2196f3;
+}
 
-  .vertical-timeline-element-content .MuiChip-root {
-    margin-right: 4px;
-    margin-bottom: 4px;
-    background-color: #f3f3f3;
-  }
+.vertical-timeline-element--education .vertical-timeline-element-content {
+  border-top: 3px solid #e91e63;
+  background-color: #f3f3f3;
+}
 
-  .vertical-timeline-element--work .vertical-timeline-element-content a {
-    color: #2196f3;
-  }
+.vertical-timeline-element--education .vertical-timeline-element-content a {
+  color: #e91e63;
+}
 
-  .vertical-timeline-element--education .vertical-timeline-element-content {
-    border-top: 3px solid #e91e63;
-    background-color: #f3f3f3;
+.vertical-timeline-element--open-source .vertical-timeline-element-content {
+  border-top: 3px solid #33bb0c;
+  background-color: #f3f3f3;
+}
 
-  }
+.vertical-timeline-element--open-source .vertical-timeline-element-content a {
+  color: #33bb0c;
+}
 
-  .vertical-timeline-element--education .vertical-timeline-element-content a {
-    color: #e91e63;
-  }
-
-  .vertical-timeline-element--open-source .vertical-timeline-element-content {
-    border-top: 3px solid #33bb0c;
-    background-color: #f3f3f3;
-  }
-
-  .vertical-timeline-element--open-source .vertical-timeline-element-content a {
-    color: #33bb0c;
-  }
-
-  .vertical-timeline-element-content-arrow {
-    border-right: 7px solid #f3f3f3 !important;
-  }
+.vertical-timeline-element-content-arrow {
+  border-right: 7px solid #f3f3f3 !important;
 }
 
