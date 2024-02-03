@@ -30,6 +30,8 @@ jobs:
         run: |
           cd website
           npm run build
+      - name: Add custom domain to CNAME
+        run: echo javier.monton.info > ./website/build/CNAME
 
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
