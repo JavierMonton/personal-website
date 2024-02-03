@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[6481],{13552:e=>{e.exports=JSON.parse('{"label":"JDBC-Sink","permalink":"/blog/tags/jdbc-sink","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);
