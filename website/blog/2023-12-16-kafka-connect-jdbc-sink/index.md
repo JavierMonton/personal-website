@@ -9,7 +9,7 @@ tags: [Kafka-Connect, JDBC-Sink, Kafka, IAM-Auth, MSK, K8s]
 A guide to move data from Kafka to an AWS RDS using Kafka Connect and the JDBC Sink Connector with IAM Auth.
 
 ## Kafka Connect
-For these examples, we are using the Confluent's Kafka Connect on its Docker version, as we are going to deploy it in a Kubernetes cluster.
+For these examples, we are using Confluent's Kafka Connect on its Docker version, as we are going to deploy it in a Kubernetes cluster.
 
 ### Single and distributed modes
 
@@ -17,7 +17,7 @@ Kafka Connect comes with two modes of execution, single and distributed. The mai
 In the case of K8s, it means we will be using more than one pod to run Kafka Connect.
 
 :::warning
-Be aware that these two modes are using different class paths, so if you are doing changes inside the docker and you are running the single mode in local but distributed in production, you might have different results.
+Be aware that these two modes use different class paths, so if you are doing changes inside the docker and you are running the single mode locally but distributed in production, you might have different results.
 I strongly recommend to check manually which are the class paths in each case using something like 
 ```bash
 ps aux | grep java
@@ -28,18 +28,18 @@ java -Xms256M -Xmx2G -server -XX:+UseG1GC -XX:MaxGCPauseMillis=20 -XX:Initiating
 ```
 And you'll find all the directories (after `-cp`) included in the running Kafka Connect. 
 
-- Note that a folder called `cp-base-new` is widely used in the Single mode, but not very well documented.
-- Setting your deployment to 1 replicas will run Kafka Connect in Single mode, while setting it to 2 or more will run it in Distributed mode.
+- Note that a folder called `cp-base-new` is widely used in the Single mode, but is not very well documented.
+- Setting your deployment to 1 replicas will run Kafka Connect in Single mode while setting it to 2 or more will run it in Distributed mode.
 :::
 
 ### Deploying in K8s
-This should be fairly straightforward, as we are using the Confluent's Kafka Connect Docker image, which is already prepared to be deployed in K8s.
-Confluent provides a [Helm chart](https://github.com/confluentinc/cp-helm-charts/blob/master/charts/cp-kafka-connect/README.md) as example, so it should be easy. You can also create your own.
+This should be fairly straightforward, as we are using Confluent's Kafka Connect Docker image, which is already prepared to be deployed in K8s.
+Confluent provides a [Helm chart](https://github.com/confluentinc/cp-helm-charts/blob/master/charts/cp-kafka-connect/README.md) as an example, so it should be easy. You can also create your own.
 
 ### Using MSK (Kafka)
 If you are using the AWS's Kafka version, MSK, and you are authenticating using IAM, you will need to do a few things:
 - Configure some environment variables in Kafka Connect 
-- Add the required AWS libraries to the class path
+- Add the required AWS libraries to the classpath
 
 #### Environment variables
 `CONNECT_BOOTSTRAP_SERVERS` will have the brokers, as usual, but using the `9098` port.
@@ -50,7 +50,7 @@ CONNECT_SASL_CLIENT_CALLBACK_HANDLER_CLASS = software.amazon.msk.auth.iam.IAMCli
 CONNECT_SASL_MECHANISM = AWS_MSK_IAM
 CONNECT_SECURITY_PROTOCOL = SASL_SSL
 ```
-And also you have to provide a `JAAS` file with the credentials. You can find more info about this in the [AWS's documentation](https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html#msk-password-sasl-plain).
+Also, you have to provide a `JAAS` file with the credentials. You can find more info about this in the [AWS's documentation](https://docs.aws.amazon.com/msk/latest/developerguide/msk-password.html#msk-password-sasl-plain).
 For IAM, something like this should work:
 ```bash
 CONNECT_SASL_JAAS_CONFIG = 
@@ -79,7 +79,7 @@ If you are using your own Helm template, you could create some variables for the
 :::
   
 ### Formatting logs as JSON
-Logs are very important, and having a good format is key to be able to read and process them easily. Usually, in production we could want to have them as JSON, and Kafka Connect does not make it as easy for us as we might expect.
+Logs are very important, and having a good format is key to being able to read and process them easily. Usually, in production, we could want to have them as JSON, and Kafka Connect does not make it as easy for us as we might expect.
 
 If you only want to change the log level or format your logs a bit, you could use the environment variables available for that, they are [described in their docs](https://docs.confluent.io/platform/current/connect/logging.html#use-environment-variables-docker)
 but if you want to proper format all logs as JSON, you will need to do a few more things.
@@ -104,13 +104,13 @@ Confluent will tell you that you can modify the template for logs in `/etc/confl
 - Some startup logs in `/etc/kafka-connect/log4j.properties`
 - There are also some random logs not using Log4j, they are defined in `/usr/lib/jvm/jre/conf/logging.properties`
 
-If you want to format everything to JSON, I would recommend to enter inside the docker image, look for those files, and change them as desired. Your Dockerfile could then replace them while creating the image.
+If you want to format everything to JSON, I would recommend entering inside the docker image, looking for those files, and changing them as desired. Your Dockerfile could then replace them while creating the image.
 
 :::warning
 There are still some logs during the start-up not formatted as JSON. Confluent's Kafka Connect is using a [Python script to start up the service](https://github.com/confluentinc/confluent-docker-utils/blob/master/confluent/docker_utils/cub.py), 
-and that service is using some `prints` that does not belong to any Log4j, so they are not formatted in any way.
+and that service is using some `prints` that do not belong to any Log4j, so they are not formatted in any way.
 
-If you want to format those `prints` too, you will need to do something else as they don't have any configuration file. You could use a `sed` command to replace them, or you could modify the `cub.py` file in your image with the desired format.
+If you want to format those `prints` too, you will need to do something else as they don't have any configuration files. You could use a `sed` command to replace them, or you could modify the `cub.py` file in your image with the desired format.
 :::
 
 
@@ -121,14 +121,14 @@ plugin.path=/usr/local/share/kafka/plugins
 ```
 
 In any case, copying and pasting files into a Docker can limit a bit the flexibility of the solution, so I would recommend building a project where you can add all the dependencies that you need, meaning that libraries and plugins can be built and copied inside the Docker during the CI. 
-By doing this, you will be able to use Gradle, Maven, SBT or any other building tool to manage your dependencies, upgrade versions and build plugins.
+By doing this, you will be able to use Gradle, Maven, SBT, or any other building tool to manage your dependencies, upgrade versions, and build plugins.
 
 :::tip
-Note that Plugins and libraries are not included in the same path, so I would recommend to build a different project for each. 
+Note that Plugins and libraries are not included in the same path, so I would recommend building a different project for each. 
 For example, we could build a main project that can build the Kafka Connect image with their libraries and a subproject that can build plugins in a different folder. Then, the Dockerfile could easily copy both folders into the image in the right paths.
 :::
 
-If you build a project like that, in order to add the JDBC plugin, for example, in Gradle you only need to add this:
+If you build a project like that, to add the JDBC plugin, for example, in Gradle you only need to add this:
 ```kotlin
 dependencies {
     implementation("io.confluent:kafka-connect-jdbc:10.7.4")
@@ -136,17 +136,17 @@ dependencies {
 ```
 
 ### Adding libraries
-As mentioned earlier, libraries must go in the class-path, not in the plugins' folder. 
+As mentioned earlier, libraries must go in the classpath, not in the plugins' folder. 
 If you are using a project to build your libraries and plugins, you could use many different plugins to pack all the dependencies into a .jar that can be copied into the Docker image.
 
-For example, with Gradle we could include the AWS library needed for IAM authentication, and the Log4j JSON formatter, like this:
+For example, with Gradle, we could include the AWS library needed for IAM authentication, and the Log4j JSON formatter, like this:
 ```kotlin
 dependencies {
     implementation("software.amazon.msk:aws-msk-iam-auth:1.1.7")
     implementation("net.logstash.log4j:jsonevent-layout:1.7")
 }
 ```
-And using a plugin to build a fatJar, everything should be included in one .jar file that we can copy into the Docker image.
+Using a plugin to build a fat jar, everything should be included in one .jar file that we can copy into the Docker image.
 
 :::tip
 For the JDBC Sink, we will need to also include a Driver and more libraries in case we want to use IAM Auth with RDS, we will see that later.
@@ -171,7 +171,7 @@ Also, you can even open the API in multiple ports, by doing this:
 ```
 
 #### Securing the API
-Kafka Connect's REST API lacks of security options, it only allows you to use a basic authentication, which might not be what you are looking for. Also, the code seems to have several places where they do an `if - else` to check if basic auth is enabled or not.
+Kafka Connect's REST API lacks security options, it only allows you to use a basic authentication, which might not be what you are looking for. Also, the code seems to have several places where they do an `if - else` to check if basic auth is enabled or not.
 
 But, there is also another way we can use to build our own security layer. 
 
@@ -185,12 +185,12 @@ To do this, you have to create a JAX-RS plugin and then register it in Kafka Con
 ```scala
 class MySecurityExtension extends ConnectRestExtension {}
 ```
-This class will need to be packed with your libraries and included in the class path, as we did with other libraries.
+This class will need to be packed with your libraries and included in the classpath, as we did with other libraries.
 
 
 ## JDBC Sink Connector
 
-We need to download the plugin and add it inside the plugins folder. By default, it's `/usr/share/confluent-hub-components/`. 
+We need to download the plugin and add it to the plugins' folder. By default, it's `/usr/share/confluent-hub-components/`. 
 
 You can get the .jar with `wget` and copy it inside the Docker image, in the aforementioned folder. Or, as suggested earlier, if you are building a project using a building tool, like Gradle, you can use Maven to download all the plugins you might need. We only need to add the dependency:
 ```kotlin
@@ -201,7 +201,7 @@ dependencies {
 And build the .jar. Then, we can copy it inside the Docker image.
 
 ### Drivers
-Only the plugin is not enough to connect to a database, we will also need the driver. In our case, we are using PostgreSQL RDS ,so we will need the driver for Postgres.
+Only the plugin is not enough to connect to a database, we will also need the driver. In our case, we are using PostgreSQL RDS, so we will need the driver for Postgres.
 :::info
 Several drivers are already included in the Kafka Connect image, but they are not inside the default classpath, so if we try to run the connector without adding the driver properly, we will get an error like `No suitable driver found`.
 They are placed in `/usr/share/confluent-hub-components/`, but as we can see using something like `ps aux | grep java`, they are not included in the classpath. So, we have three options:
@@ -210,7 +210,7 @@ They are placed in `/usr/share/confluent-hub-components/`, but as we can see usi
 - Find our own driver and copy it inside the Docker image, in the classpath
 :::
 
-I would go for the third option, that gives us more flexibility about which version of the driver we want to use. 
+I would go for the third option, which gives us more flexibility about which version of the driver we want to use. 
 
 So, we can download the driver and pack it with our libraries, and then copy it inside the Docker image:
 ```kotlin
@@ -283,15 +283,15 @@ table.name.format: "first_table"
 ### Using patterns for topics and table names
 The JDBC does some magic to map topics to tables, but it's not always what we want. For example, if we have a topic called `my.topic` it will take `my` as schema name and `topic` as table name. More details about [table parsing](https://docs.confluent.io/kafka-connectors/jdbc/current/sink-connector/overview.html#table-parsing) can be found in their docs.
 
-But, it's likely that we use a pattern for our topics, specially if we are building a Datalake, so we might want to create tables based in a different pattern. For example, we could have a topic called `my.first.topic` and we want to create a table called `first_table` in our database. This can still be achieved using a `router` and a `table.name.format` property.
+But, we likely use a pattern for our topics, especially if we are building a Datalake, so we might want to create tables based on a different pattern. For example, we could have a topic called `my.first.topic` and we want to create a table called `first_table` in our database. This can still be achieved using a `router` and a `table.name.format` property.
 
 
 :::tip
-Be aware that not all types accepted in your Kafka topics are accepted in your database, JDBC Driver and/or the JDBC Sink. For example, the list of valid types from the perspective of the [JDBC Sink are here](https://github.com/confluentinc/kafka-connect-jdbc/blob/master/src/main/java/io/confluent/connect/jdbc/dialect/PostgreSqlDatabaseDialect.java#L299).
+Be aware that not all types accepted in your Kafka topics are accepted in your database, JDBC Driver and/or the JDBC Sink. For example, the list of valid types from the perspective of the [JDBC Sink is here](https://github.com/confluentinc/kafka-connect-jdbc/blob/master/src/main/java/io/confluent/connect/jdbc/dialect/PostgreSqlDatabaseDialect.java#L299).
 :::
 
 ### Case insensitive
-By default, the JDBC Sink will use quotes for all table and column names, thi is usually fine, but PostgeSQL is case insensitive if quotes are not used, so if your data from Kafka comes with uppercase letters, for example, if you are using `camelCase`, but if you are not using quotes in your database, or you do not want to use them while querying, you should dissable quotes in Kafka Connect with:
+By default, the JDBC Sink will use quotes for all table and column names, which is usually fine, but PostgreSQL is case insensitive if quotes are not used, so if your data from Kafka comes with uppercase letters, for example, if you are using `camelCase`, but if you are not using quotes in your database, or you do not want to use them while querying, you should disable quotes in Kafka Connect with:
 ```
 quote.sql.identifiers=never
 ```
@@ -299,23 +299,23 @@ quote.sql.identifiers=never
 
 
 ## Deploy new connectors in K8s
-Deploying new connectors can be tricky, specially if you are using Kubernetes. Kafka Connect exposes an API that we can use to create new connectors, but we have to "manually" do some calls to it in order to create, update or delete connectors. This is not the best way of integrating something on our CI/CD, specially if our CI is running outside our K8s cluster.
+Deploying new connectors can be tricky, especially if you are using Kubernetes. Kafka Connect exposes an API that we can use to create new connectors, but we have to "manually" do some calls to create, update, or delete connectors. This is not the best way of integrating something on our CI/CD, especially if our CI is running outside our K8s cluster.
 
 Ideally, we would want to have a configuration file in our repository, that can be updated and automatically deployed during our CI.
 
 ## connect-operator
 
-There is a solution for this, the Confluent's [connect-operator](https://github.com/confluentinc/streaming-ops/tree/main/images/connect-operator), although the solution is not very robust, is does the job.
+There is a solution for this, Confluent's [connect-operator](https://github.com/confluentinc/streaming-ops/tree/main/images/connect-operator), although the solution is not very robust, it does the job.
 
 This is based on the [shell-operator](https://github.com/flant/shell-operator), a Kubernetes operator that can be deployed in our cluster and configured to "listen" for specific events, like new deployments, changes in config maps or whatever we want.
-Specifically, this `connect-operator` is designed to listen for changes in a config map, and then it will create, update or delete connectors based on the content of that config map.
+Specifically, this `connect-operator` is designed to listen for changes in a config map, and then it will create, update, or delete connectors based on the content of that config map.
 
 In other words, we can put our Connector's configuration in a config map, and then the `connect-operator` will create the connector for us.
 
 :::tip
 The `connect-operator` does not need to be deployed together with Kafka Connect, it is an independent pod that will be running in our cluster, 
 it can be in the same namespace or not. It also can listen for config-maps attached to our Kafka Connect or to any other deployment, 
-all depends on our configuration and K8s permissions.
+all depending on our configuration and K8s permissions.
 :::
 
 :::warning
@@ -332,7 +332,7 @@ By default, the operator is called in two ways:
 - When an event is triggered, our script will be triggered with the event as a parameter.
 
 ### Listening to config maps
-The config that we have to return to listen for config map changes should se something similar to this:
+The config that we have to return to listen for config map changes should see something similar to this:
 ```yaml
 configVersion: v1
 kubernetes:
@@ -359,8 +359,8 @@ The configuration looks different from a standard K8s configuration, but the `sh
 :::
 
 ### Config Map
-The config map must have the connectors configuration in JSON, in the same way you will use it in the REST API. 
-I would suggest to build a Helm template for config maps, so you can write your connectors configuration in YAML and then convert it to JSON using Helm.
+The config map must have the connectors' configuration in JSON, in the same way, you will use it in the REST API. 
+I would suggest building a Helm template for config maps, so you can write your connectors configuration in YAML and then convert it to JSON using Helm.
 
 
 Something like this should work in Helm:
@@ -404,7 +404,7 @@ The config-map can be attached to your Kafka Connect deployment, or to any other
 Once it is deployed as a config-map, the `connect-operator` will create the connector for us.
 
 ### Replacing variables
-The `connect-operator` uses `jq` to replace variables, they can be stored in some config files inside the docker, passed as arguments or as environment variables.
+The `connect-operator` uses `jq` to replace variables, they can be stored in some config files inside the docker, passed as arguments, or as environment variables.
 Having them inside config files inside the Docker images looks weird to me, why our operator should know about the context of our connectors?
 
 These are some examples of replacing variables, but you can find more details in the `jq` documentation:
@@ -425,14 +425,14 @@ Variables inside strings:
 connection.user: "prefix_\(env.USERNAME)_suffix"
 ```
 :::tip
-If you are parsing this with Helm, you might need to have the string between single quotes, otherwise Helm will fail on `\(`
+If you are parsing this with Helm, you might need to have the string between single quotes, otherwise, Helm will fail on `\(`
 :::
 
 
 
 
 ### RBAC permissions to read config maps
-If your `connect-operator` stays in a different deployment than the config-map, you will need to give it permissions to read the config map. This can be achieved using a Role and a RoleBinding using Helm.
+If your `connect-operator` stays in a different deployment than the config-map, you will need to give it permission to read the config map. This can be achieved using a Role and a RoleBinding using Helm.
 
 Something like this needs to be created:
 
@@ -470,11 +470,11 @@ roleRef:
 
 ## Custom Kafka groups for your connectors
 
-By default, Kafka Connect will create a group for each connector, and it will use the connector's name as the group name, with `connect-` as prefix.
+By default, Kafka Connect will create a group for each connector, and it will use the connector's name as the group name, with `connect-` as a prefix.
 This is not very flexible, as we might want to have our own group names. For example, if we are sharing K8s clusters with other teams, 
 we might want to have our own group names to avoid conflicts. Or we could have our own naming convention with ACLs in Kafka.
 
-In order to decide a group name, we have to change two configurations:
+To decide a group name, we have to change two configurations:
 
 First, we have to create an environment variable that allows us to override some configs, including the group name:
 ```bash
@@ -484,7 +484,7 @@ CONNECT_CONNECTOR_CLIENT_CONFIG_OVERRIDE_POLICY=All
 This can be on your deployment file or on your Dockerfile.
 :::
 
-Then, we can add the group name in our connector's configuration:
+Then, we can add the group name to our connector's configuration:
 ```yaml
 consumer.override.group.id: "my-custom-group-name"
 ```

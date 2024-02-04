@@ -18,7 +18,7 @@ The library implements a few abstract types that can hold any kind of structure,
 it can convert between multiple types without having any code relating them. In other words, there is no need to implement a transformation between type A to type B, the library will do it for you.
 
 As an example, let's say we have a generic type called `Generic`. Now we want to convert from type `A` to type `B`. 
-If we implement the conversion from `A` to `Generic` and the conversion from `Generic` to `B`, automatically we can convert from `A` to `B` although there is no a single line of code mixing `A` and `B`.
+If we implement the conversion from `A` to `Generic` and the conversion from `Generic` to `B`, automatically we can convert from `A` to `B` although there is no single line of code mixing `A` and `B`.
 
 
 We can also do the opposite, we can convert from `B` to `A` by implementing the conversion from `B` to `Generic` and the conversion from `Generic` to `A`. Now we can convert between `A` and `B` as we wish.
@@ -29,7 +29,7 @@ If now we introduce `D`, we would need to implement the conversion from `A` to `
 
 
 Having this `Generic` type means that when we introduce `C`, we only need to implement the conversion from `C` to `Generic` and from `Generic` to `C`, without worrying at all about other implementations or types. 
-Moreover, is likely that the conversion will be very similar to others, so we can reuse some the code.
+Moreover, is likely that the conversion will be very similar to others, so we can reuse some of the code.
 
 :::tip
 It is important to know that one of these types is the Scala types themselves. So if we want to convert from `Scala types` (like `case classes`) to another type, we only need to implement `Generic -> newType`
@@ -39,11 +39,11 @@ It is important to know that one of these types is the Scala types themselves. S
 
 
 ### Modules
-As mentioned, the library has multiple modules, each one of them represents a different system with its own types. Each module implements the conversion from and to `Generic`.
+As mentioned, the library has multiple modules, each one of them representing a different system with its own types. Each module implements the conversion from and to `Generic`.
 
-For now, the modules are `core` (for Scala types and common code), `BigQuery`, `Cassandra`, `Circe` and `Spark`.
+For now, the modules are `core` (for Scala types and common code), `BigQuery`, `Cassandra`, `Circe`, and `Spark`.
 
-In order to use the library, only the modules that are needed should be imported. For example, if we want to convert from `Scala types` to `BigQuery` types, we only need to `BigQuery` module. (`Core` module is always included as dependency)
+To use the library, only the modules that are needed should be imported. For example, if we want to convert from `Scala types` to `BigQuery` types, we only need to `BigQuery` module. (`Core` module is always included as a dependency)
 If we want to convert from `Spark` to `BigQuery` we need to import both `Spark` and `BigQuery` modules. 
 
 ### Generic type
@@ -52,9 +52,9 @@ The `Generic` type is called `SqlType` and it's implemented as [sealed trait](ht
 In Scala 3, this type is implemented as an [enum](https://github.com/data-tools/big-data-types/blob/main/core/src/main/scala_3/org/datatools/bigdatatypes/basictypes/SqlType.scala) but both represents the same.
 
 #### Repeated values
-Usually, there are two ways of implement a repeated value like an Array. Some systems use a type like `Array` or `List` 
-and others flag a basic type with `repeated`. The implementation of this `SqlType` is using the latter, 
-so any basic type can have a `mode` that can be `Required`, `Nullable` or `Repeated`. This is closer to the `BigQuery` implementation.
+Usually, there are two ways of implementing a repeated value like an Array. Some systems use a type like `Array` or `List` 
+and others flag a basic type with `repeated`. The implementation of this `SqlType` uses the latter, 
+so any basic type can have a `mode` that can be `Required`, `Nullable`, or `Repeated`. This is closer to the `BigQuery` implementation.
 
 :::note
 This implementation does not allow for `Nullable` and `Repeated` at the same time, but a `Repeated` type can have 0 elements.
@@ -65,7 +65,7 @@ The `SqlStruct` can hold a list of records, including other `SqlStruct`, meaning
 
 ## Type-class derivation
 
-Type-classes are a way of implementing "ad-hoc polymorphism". This means that we can implement a behaviour for a type without having to modify the type itself.
+Type-classes are a way of implementing "ad-hoc polymorphism". This means that we can implement behaviour for a type without having to modify the type itself.
 In Scala, we achieve this through implicits.
 
 The interesting part of type-classes for this library is that we can derive a type-class for a type without having to implement it.
@@ -80,7 +80,7 @@ trait MyTypeClass[A] {
 :::tip
 A type-class is always a `trait` with a generic type.
 :::
-The, we can implement our type-class for an `Int` type:
+Then, we can implement our type-class for an `Int` type:
 
 ```scala
 implicit val myTypeClassForInt: MyTypeClass[Int] = new MyTypeClass[Int] {
@@ -119,7 +119,7 @@ We would need to implement the type-class for `MyClass`. But, if we implement th
 :::note
 Implementing the conversion for a `Product` type is more complex than implementing it for a `List` type, and usually [Shapeless](https://github.com/milessabin/shapeless) is the library we use to do this in Scala 2.
 
-In Scala 3, the language already allow us to derive the type-class for a `Product` type, so we don't need to use Shapeless.
+In Scala 3, the language already allows us to derive the type-class for a `Product` type, so we don't need to use Shapeless.
 
 In [big-data-types](https://github.com/data-tools/big-data-types) we have the implementation for all basic types, including iterables and `Product` types [here for Scala 2](https://github.com/data-tools/big-data-types/blob/main/core/src/main/scala_2/org/datatools/bigdatatypes/conversions/SqlTypeConversion.scala) 
 and [here for Scala 3](https://github.com/data-tools/big-data-types/blob/main/core/src/main/scala_3/org/datatools/bigdatatypes/conversions/SqlTypeConversion.scala).
@@ -127,7 +127,7 @@ and [here for Scala 3](https://github.com/data-tools/big-data-types/blob/main/co
 
 ## Implementing a new type
 
-In order to implement a new type, we need to implement the conversion from and to `Generic` type. There is a complete guide, step by step, with examples, in the [official documentation](https://data-tools.github.io/big-data-types/docs/Contributing/CreateNewType)
+To implement a new type, we need to implement the conversion from and to `Generic` type. There is a complete guide, step by step, with examples, in the [official documentation](https://data-tools.github.io/big-data-types/docs/Contributing/CreateNewType)
 
 
 A quick example, let's say we want to implement a new type called `MyType`. We need to implement the conversion `MyType -> Generic` and `Generic -> MyType`.
@@ -143,7 +143,7 @@ trait GenericToMyType[A] {
   def getType: MyTypeObject
 }
 ```
-Maybe our type works with a List at the top level, like Spark does, so instead, we will do:
+Maybe our type works with a List at the top level, as Spark does, so instead, we will do:
 ```scala
 trait GenericToMyType[A] {
   def getType: List[MyTypeObject]
@@ -182,7 +182,7 @@ And `Generic -> MyType` by doing this:
 val int: MyIntType = SqlTypeToBigQuery[SqlInt].getType
 ```
 
-This can work well when we work this `case classes` and we don't have an instance of them. For example, a `case class` definition can be converted into a `BigQuery` Schema, ready to be used for table creation.
+This can work well when we work these `case classes` and we don't have an instance of them. For example, a `case class` definition can be converted into a `BigQuery` Schema, ready to be used for table creation.
 
 But, sometimes, our types work with instances rather than definitions, and we need to use them to convert to other types. 
 
@@ -193,7 +193,7 @@ trait SqlInstanceToMyType[A] {
 }
 ```
 
-Implementing this type class allows to use the conversion like this:
+Implementing this type-class allows to use the conversion like this:
 ```scala
 val mySchema: MyTypeObject = SqlInstanceToMyType.myTypeSchema(theOtherType)
 ```
@@ -203,7 +203,7 @@ But these syntaxis are not very friendly, and we can use extension methods to ma
 ## Extension methods
 Extension methods in Scala 2 are done through implicit classes and allow us to create new methods for existing types.
 
-In the library, we implement extension methods for `Generic -> SpecificType` and the interesting part, again, is that we don't need to implement `A -> B` directly, the compiler can derive it for us.
+In the library, we implement extension methods for `Generic -> SpecificType`, and the interesting part, again, is that we don't need to implement `A -> B` directly, the compiler can derive it for us.
 
 <Tabs>
     <TabItem value="Scala2" label="Scala 2" default>
@@ -237,7 +237,7 @@ val bigQuerySchema = sparkDf.schema.asBigQuery
 
 ## More types to come
 
-The library has only a few types implemented (BigQuery, Spark, Cassandra and Circe) but implementing a new type is fairly easy and it gets automatically methods that can be used to convert it into any other type already implemented. 
+The library has only a few types implemented (BigQuery, Spark, Cassandra, and Circe) but implementing a new type is fairly easy and it gets automatically methods that can be used to convert it into any other type already implemented. 
 As this grows, the number of conversions grows exponentially, and the library becomes more powerful.
 
 Some types that could be potentially implemented:
@@ -251,6 +251,6 @@ Some types that could be potentially implemented:
 - ElasticSearch templates
 - ...
 
-Some types could have some restrictions, but they could be implemented in a different way, for example, 
+Some types could have some restrictions, but they could be implemented differently, for example, 
 a type conversion could be implemented as a `String` conversion, being the string a "Create table" statement for a specific database 
 and automatically any other type could be printed as a "Create table" statement.
