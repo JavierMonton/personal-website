@@ -134,7 +134,7 @@ const config = {
             ],
           },
           {
-            title: 'Open Source',
+            title: 'Open Source / Projects',
             items: [
               {
                 label: 'Blog',
@@ -143,6 +143,10 @@ const config = {
               {
                 label: 'Big-Data-Types',
                 href: 'https://data-tools.github.io/big-data-types/',
+              },
+              {
+                label: 'Milpartituras.com',
+                href: 'https://milpartituras.com',
               },
             ],
           },
