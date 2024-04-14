@@ -6,7 +6,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 const FeatureList = [
   {
     title: 'Blog',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('@site/static/img/blog200.svg').default,
     description: (
       <>
         Programming, technology, and other stuff.
@@ -15,7 +15,7 @@ const FeatureList = [
   },
   {
     title: 'Open Source',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('@site/static/img/open-source200.svg').default,
     description: (
       <>
         Open Source projects I'm working on.
