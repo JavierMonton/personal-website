@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[7698],{13205:e=>{e.exports=JSON.parse('{"label":"Mirror-Maker2","permalink":"/blog/tags/mirror-maker-2","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);
