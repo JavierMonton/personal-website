@@ -10,7 +10,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'Personal website',
   tagline: 'Programming, technology, and other stuff.',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/faviconblue.ico',
 
   // Set the production url of your site here
   url: 'https://javier.monton.info',
@@ -76,7 +76,7 @@ const config = {
         title: 'Home',
         logo: {
           alt: 'My Site Logo',
-          src: 'img/wheel1.svg',
+          src: 'img/logo-blue.svg',
         },
         items: [
           /*
