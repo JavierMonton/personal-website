@@ -6,7 +6,7 @@
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://javier.monton.info/blog"/>
     <subtitle>Personal website Blog</subtitle>
-    <icon>https://javier.monton.info/img/favicon.ico</icon>
+    <icon>https://javier.monton.info/img/faviconblue.ico</icon>
     <entry>
         <title type="html"><![CDATA[Kafka Connect, MM2, and Offset Management]]></title>
         <id>https://javier.monton.info/blog/kafka-connect-mm2-offset-management</id>
