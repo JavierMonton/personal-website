@@ -2,11 +2,82 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://javier.monton.info/blog</id>
     <title>Personal website Blog</title>
-    <updated>2024-04-13T00:00:00.000Z</updated>
+    <updated>2024-10-06T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://javier.monton.info/blog"/>
     <subtitle>Personal website Blog</subtitle>
     <icon>https://javier.monton.info/img/faviconblue.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[Kafka - Reassign Partitions]]></title>
+        <id>https://javier.monton.info/blog/kafka-reassign-partitions</id>
+        <link href="https://javier.monton.info/blog/kafka-reassign-partitions"/>
+        <updated>2024-10-06T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[When working with Kafka, increasing or decreasing the number of brokers isn't as trivial as it seems. If you add a new broker,]]></summary>
+        <content type="html"><![CDATA[<p>When working with Kafka, increasing or decreasing the number of brokers isn't as trivial as it seems. If you add a new broker,
+it will stand there doing nothing. You have to manually reassign partitions of your topics to the new broker.
+But you don't want to just move some topics completely to your new broker, you want to spread your partitions are they replicas equitably across all your brokers.
+You also want to have the number of leader partitions balanced across all your brokers.</p>
+<h1>Reassign partitions</h1>
+<p>To reassign partitions to different brokers, you can use the Kafka binaries (<code>bin/kafka-reassign-partitions.sh</code>),
+but it isn't trivial if you have to reassign thousands of topics.</p>
+<p>The binary file has three operations:</p>
+<ul>
+<li><code>--generate</code>. This will generate a plan to reassign partitions.</li>
+<li><code>--execute</code>. This will execute the plan.</li>
+<li><code>--verify</code>. This will verify the status of the reassignment.</li>
+</ul>
+<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>tip</div><div class="admonitionContent_BuS1"><p>A throttle can be set to avoid overloading the brokers, and the throttle will remain in the cluster after the reassignment,
+until a <code>--verify</code> is run when the reassignment has finished, so it's highly recommended to run <code>--verify</code>
+until you are sure all the partitions have been reassigned.</p></div></div>
+<p>To create a plan, you have to pass a JSON file with the topics you want to reassign and the brokers you want to reassign them to.
+e.g.:</p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">{</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  "topics": [</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    { "topic": "foo1" },</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    { "topic": "foo2" }</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ],</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  "version": 1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>And it will generate you a file like this:</p>
+<div class="language-json codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-json codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">{"version":1,</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  "partitions":[{"topic":"foo1","partition":0,"replicas":[2,1],"log_dirs":["any"]},</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {"topic":"foo1","partition":1,"replicas":[1,3],"log_dirs":["any"]},</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {"topic":"foo1","partition":2,"replicas":[3,4],"log_dirs":["any"]},</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {"topic":"foo2","partition":0,"replicas":[4,2],"log_dirs":["any"]},</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {"topic":"foo2","partition":1,"replicas":[2,1],"log_dirs":["any"]},</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    {"topic":"foo2","partition":2,"replicas":[1,3],"log_dirs":["any"]}]</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">}</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>The input expects you to give the list of brokers (1,2,3,4,5...) and this JSON with the whole list of partitions and replicas.</p>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>warning</div><div class="admonitionContent_BuS1"><p>The first number in <code>"replicas":[1,3]</code> is the leader partition, the rest are the followers.
+This is very important because you might end up with more leader partitions in a broker than others, increasing its workload</p></div></div>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="problem-with-kafka-reassign-tool">Problem with Kafka Reassign tool<a href="https://javier.monton.info/blog/kafka-reassign-partitions#problem-with-kafka-reassign-tool" class="hash-link" aria-label="Direct link to Problem with Kafka Reassign tool" title="Direct link to Problem with Kafka Reassign tool">​</a></h2>
+<p>When you need to reassign a big cluster, you might find some issues with the <code>--generate</code> command:</p>
+<ul>
+<li>The plan generated is completely random. Running it twice for a topic will produce different results.</li>
+<li>The plan generated is not always optimal. It might assign more partitions to one broker than to another.</li>
+</ul>
+<p>On a cluster with thousands of partitions this might be ok, as probably randomizing the partitions will be enough to balance them across the brokers,
+but it might not be completely optional.
+Also, if you need to run this for a lot of topics, and you want to do it on batches, you don't want to run the <code>--generate</code> command for a topic twice,
+in that case, you will be reassigning a topic that was already reassigned.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="building-a-custom-reassign-plan">Building a custom reassign plan.<a href="https://javier.monton.info/blog/kafka-reassign-partitions#building-a-custom-reassign-plan" class="hash-link" aria-label="Direct link to Building a custom reassign plan." title="Direct link to Building a custom reassign plan.">​</a></h2>
+<p>To manage partitions more properly, a custom tool can be built, where partitions are defined based on the topic name and the list of brokers.
+By doing this, reassigning partitions on the same topic twice won't produce any changes. A tool like that can be used to manage the reassignment of partitions in a more controlled way.</p>
+<h1>Balance Leader partitions</h1>
+<p>After reassigning a lot of partitions, the leader partitions might not be well-balanced across your brokers.
+This means that a broker might have more leader partitions than other brokers, which is translated into more workload.
+An example in Kafka-UI:
+<img loading="lazy" alt="img.png" src="https://javier.monton.info/assets/images/unbalanced-leaders-948b4ab9ea0f891749fb184e165e8d59.png" width="415" height="275" class="img_ev3q"></p>
+<p>If you wait, the cluster probably will rebalance the leader partitions on its own (if <code>auto.leader.rebalance.enable=true</code> is set).</p>
+<p>In order to force a rebalance, you can use the <code>bin/kafka-leader-election.sh</code> binary.</p>
+<p>This an example of the CPU usage of brokers before and after the leader election:
+<img loading="lazy" alt="img.png" src="https://javier.monton.info/assets/images/cpu-4cb1359a52de8e913d080e59e959eb0c.png" width="572" height="200" class="img_ev3q"></p>
+<p>e.g.:</p>
+<div class="language-shell codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-shell codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">$ bin/kafka-leader-election.sh --bootstrap-server localhost:9092 --election-type preferred --all-topic-partitions</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p><code>--election-type</code> can be <code>preferred</code> or <code>unclean</code>. <code>preferred</code> will try to move the leader partition to the preferred broker, <code>unclean</code> will move the leader partition to any broker.</p>
+<h1>TL;DR</h1>
+<p>To reassign partitions to new brokers:</p>
+<ul>
+<li>Use the <code>bin/kafka-reassign-partitions.sh</code> with a list of topics, brokers and the <code>--generate</code> command.</li>
+<li>Use the <code>bin/kafka-reassign-partitions.sh</code> with the generated JSON and the <code>--execute</code> command.</li>
+<li>Use the <code>bin/kafka-reassign-partitions.sh</code> with the generated JSON and the <code>--verify</code> command.</li>
+<li>Use the <code>bin/kafka-leader-election.sh</code> to balance the leader partitions across your brokers.</li>
+</ul>]]></content>
+        <author>
+            <name>Javier Montón</name>
+            <uri>https://github.com/JavierMonton</uri>
+        </author>
+        <category label="partitions" term="partitions"/>
+        <category label="kafka-binaries" term="kafka-binaries"/>
+        <category label="MSK" term="MSK"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Kafka Connect, MM2, and Offset Management]]></title>
         <id>https://javier.monton.info/blog/kafka-connect-mm2-offset-management</id>
