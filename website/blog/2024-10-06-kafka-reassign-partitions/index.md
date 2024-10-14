@@ -9,7 +9,7 @@ tags: [partitions, kafka-binaries, MSK]
 
 When working with Kafka, increasing or decreasing the number of brokers isn't as trivial as it seems. If you add a new broker, 
 it will stand there doing nothing. You have to manually reassign partitions of your topics to the new broker. 
-But you don't want to just move some topics completely to your new broker, you want to spread your partitions are they replicas equitably across all your brokers. 
+But you don't want to just move some topics completely to your new broker, you want to spread your partitions and their replicas equitably across all your brokers. 
 You also want to have the number of leader partitions balanced across all your brokers.
 
 # Reassign partitions
