@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[1713],{92354:s=>{s.exports=JSON.parse('{"label":"K8s","permalink":"/blog/tags/k-8-s","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);
