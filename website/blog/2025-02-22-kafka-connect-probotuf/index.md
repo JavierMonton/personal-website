@@ -17,7 +17,7 @@ that can be used with any Kafka Connect Source or Sink, but it isn't as simple a
 If you enable:
 
 ```properties
-key.converter=io.confluent.connect.protobuf.ProtobufConverter
+value.converter=io.confluent.connect.protobuf.ProtobufConverter
 value.converter.schema.registry.url=http://localhost:8081
 ```
 
@@ -29,7 +29,10 @@ In some connectors, like a JDBC, it might be obvious that the database has a pro
 
 ## How Converters work
 
-Inside Kafka Connect, the data is represented using the classes in `org.apache.kafka.connect.data`, which can be `Struct`, 
+Inside Kafka Connect, the data is represented using the classes in `org.apache.kafka.connect.data`, which can be [Struct](https://github.com/a0x8o/kafka/blob/master/connect/api/src/main/java/org/apache/kafka/connect/data/Struct.java) class or other basic types. 
+The converters expect to work with these classes and they will transform them into the desired format, like Protobuf, or the other way around.
+
+If you define the [Schema](https://github.com/a0x8o/kafka/blob/master/connect/api/src/main/java/org/apache/kafka/connect/data/Schema.java) as a simple `String`, the Converter will understand that you only have a single field as String. If you work with JSON, the data should be translated first to a `Struct`.
 
 ## Sink & Protobuf Converter
 
@@ -37,7 +40,7 @@ In a Sink, the ProtobufConverter (the same as the Avro converter or any other) t
 From there, the Sink connector decides how to write these objects in the destination. If we use a destination that requires a schema, like an RDS, the connector will likely know (and probably need) how to write these `structs`.
 
 If we use a plugin that writes into a schemaless system, like S3 or SQS, nothing prevents the connector from writing data other than JSON or similar. 
-*The connector needs to transform the `struct` into JSON if that's what we want*.
+***The connector needs to transform the `struct` into JSON if that's what we want***.
 
 ## Source & Protobuf Converter
 Here is where it gets tricky. If we use a Protobuf converter in a Source connector, we are telling the converter to transform the `Struct` into Protobuf, but the connector needs to produce this `Struct`. 
@@ -92,8 +95,11 @@ value.converter.use.latest.version=true
 value.converter.latest.compatibility.strict=true
 ```
 
-In this situation, we are registering the schema on our side, maybe we are calling our main object `MainObject` rather than `ConnectDefault1`. But here is where the issues start to appear, the ProtobufConverter will try to validate the schema in Schema Registry, and it will fail, because it is expecting a `ConnectDefault1` and we are sending a `MainObject`.
-We could solve this by using the [SetSchemaMetadata SMT](https://docs.confluent.io/kafka-connectors/transforms/current/setschemametadata.html#set-a-namespace-and-schema-name) to set the schema name and namespace. But we still have issues with the order of the fields, more details later.
+In this situation, we are registering the schema on our side, maybe we are calling our main object `MainObject` rather than `ConnectDefault1`. But here is where the issues start to appear, 
+the ProtobufConverter will try to validate the schema in Schema Registry, and it might fail for several reasons. For example, the nested object might be recognized as a different type, because it is expecting a `ConnectDefault2` and we are sending a `MySubObject`.
+:::tip
+We can use the [SetSchemaMetadata SMT](https://docs.confluent.io/kafka-connectors/transforms/current/setschemametadata.html#set-a-namespace-and-schema-name) to set the schema name and namespace. But we still have issues with the order of the fields, more details later.
+:::
 
 So, maybe we can disable the `value.converter.latest.compatibility.strict=false` if we know the schemas are the same? 
 
@@ -101,7 +107,9 @@ We could do it, yes, then, the ProtobufConverter won't compare the schemas, it w
 If the message has exactly the same schema, it will work, if not, it will still send the message to Kafka. 
 
 And probably **the worst scenario**, lets imagine that a new event comes with fields in different order. We know that the `Struct` holds information about the field names and types, so it shouldn't cause any issue. We also know that an input message in a format like JSON also specifies the field names, so far so good.
-But, Protobuf cares about the order of the fields, not just about their names, and the `ProtobufConverter` doesn't know which the expected order. 
+But, Protobuf cares about the order of the fields, not just about their names, and the `ProtobufConverter` doesn't know which is the expected order. 
+
+
 Look at the previous Protobuf definition, a new message might come with `id` and `value` in different order, the `ProtobufConverter` will produce a schema like this:
 
 ```protobuf
