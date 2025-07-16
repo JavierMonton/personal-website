@@ -5,14 +5,6 @@ authors: javier
 tags: [kafka-streams, kafka, state-store]
 ---
 
-# Kafka Streams - Named state stores
-
-**Why should you name your state stores?**
-Because otherwise, you'll lose data.
-
-
-But first, a bit of context.
-
 # Kafka Streams
 
 Kafka Streams is a client library for building applications and microservices where the input and output data are stored in Kafka clusters. 
@@ -21,13 +13,8 @@ It combines the simplicity of writing and deploying standard Java and Scala appl
 Unlike other stream processing frameworks, Kafka Streams is not a separate processing cluster but a library that runs within your application. 
 This means you don't need to set up and manage a separate cluster - your application becomes the stream processing engine.
 
-Kafka Streams gives you simple operations like:
-- `map` - transform each record
-- `filter` - keep only records that match certain conditions  
-- `join` - combine data from different sources
-- `aggregate` - group and summarize data
-
-It also handles the hard stuff automatically, like recovering from failures and making sure data isn't lost or processed twice.
+Kafka Streams provides high-level DSL (Domain Specific Language) operations like `map`, `filter`, `join`, and `aggregate`, 
+as well as low-level Processor API for more complex use cases. It handles fault tolerance, scalability, and exactly-once processing semantics automatically.
 
 ## State Stores
 
@@ -70,15 +57,13 @@ Created when data needs to be repartitioned for operations like joins or aggrega
 <application.id>-<operation>-repartition
 ```
 
-:::danger
-**Here's the problem**: if you don't give your state stores names, Kafka Streams will make up names automatically. 
-But these automatic names can change when you update your code or Kafka Streams version, and that means you'll past data.
+:::warning
+In these cases, if you don't explicitly name your state stores, Kafka Streams will generate automatic names. The problem? Kafka Streams may change the name of your state stores between versions, leading to missing data.
 
-For example, let's say you have an app that joins a `KTable` with a `KStream`. If you redeploy your app and the changelog topic gets a new name, 
-you'll lose all the data that was stored in your `KTable`. Your joins will stop working because the old data is gone.
+As an example, if you re-deploy an application performing a `KTable` <-> `KStream` join, and the `-changelog` topic is renamed, you will lose the past data in your `KTable` and your joins won't match as expected.
 :::
 
-## Code Examples
+### Code Examples
 
 Let's take a common code example. If you do these operations in Kafka Streams:
 - Create a `KStream` from a topic
@@ -124,14 +109,16 @@ Now, new records in the `KStream` that try to find a match on data processed bef
 
 ## Naming State Stores
 
-**The solution is simple**: give your state stores names.
+Properly naming your state stores is crucial for maintainability and understanding your Kafka Streams topology. 
+When you don't explicitly name your state stores, Kafka Streams generates automatic names that can be hard to understand, 
+but more important, they can lose data during changes between versions.
 
 You can (and you should) provide explicit names for your state stores using the `Materialized` class.
 
 The above example can be modified to use explicit names for the state store:
 ```scala
     val kTable: KTable[String, String] = mappedStream.toTable(
-      Materialized.as("my-stream-TOTABLE-my-table-name")
+      Materialized.as("mapped-stream-table")
     )
 ```
 Full example: 
@@ -144,7 +131,7 @@ Full example:
     }
     // .toTable will create a state store, now with an explicit name
     val kTable: KTable[String, String] = mappedStream.toTable(
-      Materialized.as[String, String]("my-stream-TOTABLE-my-table-name")
+      Materialized.as[String, String]("mapped-stream-table")
     )
     val secondStream: KStream[String, B] = builder.stream[String, B]("test-topic-2")
     val joinedStream: KStream[String, C] = secondStream.leftJoin(kTable) { (streamValue, tableValue) =>
@@ -165,9 +152,9 @@ Also, note that the class `Named`, which you can use like `Named.as("my-name")`,
 More options can be set on a State Store, a bigger example would be:
 ```scala
 stream.toTable(
-        Named.as(s"TABLE-table-name"),
+        Named.as(s"TABLE-${tableName}"),
         Materialized
-          .as[K, V, ByteArrayKeyValueStore](s"TABLE-table-name")
+          .as[K, V, ByteArrayKeyValueStore](s"TABLE-${tableName}")
           .withKeySerde(keySerde)
           .withValueSerde(valueSerde)
           .withStoreType(storeType)
@@ -175,7 +162,7 @@ stream.toTable(
 ```
 
 
-The same problem happens with other operations like `aggregate`.
+The same happens with other operations, like `aggregate`.
 
 Without explicit naming, Kafka Streams generates names like:
 ```
@@ -202,7 +189,7 @@ We could list several benefits, but among them, the most important one is: **You
 
 ## TL;DR
 
-- Always name your state stores, or you'll lose data without knowing it.
+- If you do not give explicit names to your state stores, eventually you will silently lose data.
 
 If you think this might be already happening to you, check all the topics named like `*-changelog` in your Kafka cluster, 
 and check if any of them has outdated data, it could potentially indicate that a state store was renamed at some point, 
