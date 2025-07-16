@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[1184],{54075:s=>{s.exports=JSON.parse('{"label":"kafka-streams","permalink":"/blog/tags/kafka-streams","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);
