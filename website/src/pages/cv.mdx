@@ -21,7 +21,11 @@ import {
     PhpOriginal,
     RedisOriginal,
     ScalaOriginal,
-    TerraformOriginal
+    TerraformOriginal,
+    PythonOriginal,
+    ApacheairflowOriginal,
+    HadoopOriginal,
+    ApachesparkOriginal
 } from "devicons-react";
 
 
@@ -34,7 +38,26 @@ import {
     <VerticalTimelineElement
         className="vertical-timeline-element--work first"
         contentArrowStyle={{borderRight: '7px solid  rgb(33, 150, 243)'}}
-        date="2022 - Present"
+        date="2025 - present"
+        iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
+        icon={<WorkIcon/>}
+    >
+        <h3 className="vertical-timeline-element-title">Senior Data Engineer</h3>
+        <h4 className="vertical-timeline-element-subtitle"><a target={"_blank"} href={"https://wikimediafoundation.org/"}>Wikimedia Foundation</a></h4>
+        <p>
+            <Chip icon={<ScalaOriginal />} label="Scala" variant="outlined" />
+            <Chip icon={<PythonOriginal />} label="Python" variant="outlined" />
+            <Chip icon={<ApachekafkaOriginal />} label="Kafka" variant="outlined" />
+            <Chip icon={<ApachesparkOriginal />} label="Spark" variant="outlined" />
+            <Chip icon={<HadoopOriginal />} label="Hadoop" variant="outlined" />
+            <Chip icon={<ApacheairflowOriginal />} label="Airflow" variant="outlined" />
+            <Chip icon={<KubernetesPlain />} label="K8s" variant="outlined" />
+        </p>
+    </VerticalTimelineElement>
+    <VerticalTimelineElement
+        className="vertical-timeline-element--work first"
+        contentArrowStyle={{borderRight: '7px solid  rgb(33, 150, 243)'}}
+        date="2022 - 2025 (3 years)"
         iconStyle={{background: 'rgb(33, 150, 243)', color: '#fff'}}
         icon={<WorkIcon/>}
     >
@@ -68,7 +91,7 @@ import {
             <Chip icon={<ScalaOriginal />} label="Scala" variant="outlined" />
             <Chip icon={<ApachekafkaOriginal />} label="Kafka" variant="outlined" />
             <Chip icon={<ApachekafkaOriginal />} label="Kafka Streams" variant="outlined" />
-            <Chip label="Spark" variant="outlined" />
+            <Chip icon={<ApachesparkOriginal />} label="Spark" variant="outlined" />
             <Chip icon={<KubernetesPlain />} label="K8s" variant="outlined" />
             <Chip icon={<TerraformOriginal />} label="Terraform" variant="outlined" />
             <Chip icon={<AmazonwebservicesOriginal />} label="AWS" variant="outlined" />
