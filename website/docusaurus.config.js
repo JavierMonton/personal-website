@@ -146,6 +146,14 @@ const config = {
                 href: 'https://data-tools.github.io/big-data-types/',
               },
               {
+                label: 'Renfe Tracker',
+                href: 'https://github.com/JavierMonton/renfe-tracker/',
+              },
+              {
+                label: 'GNOME Window Resizer',
+                href: 'https://github.com/JavierMonton/gnome-window-resizer',
+              },
+              {
                 label: 'Milpartituras.com',
                 href: 'https://milpartituras.com',
               },
