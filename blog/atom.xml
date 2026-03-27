@@ -2,11 +2,53 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://javier.monton.info/blog</id>
     <title>Personal website Blog</title>
-    <updated>2025-07-13T00:00:00.000Z</updated>
+    <updated>2026-03-27T00:00:00.000Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://javier.monton.info/blog"/>
     <subtitle>Personal website Blog</subtitle>
     <icon>https://javier.monton.info/img/faviconblue.ico</icon>
+    <entry>
+        <title type="html"><![CDATA[renfe-tracker - Monitor Renfe Train Prices]]></title>
+        <id>https://javier.monton.info/blog/renfe-tracker</id>
+        <link href="https://javier.monton.info/blog/renfe-tracker"/>
+        <updated>2026-03-27T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[renfe-tracker is a self-hosted tool I built to track Renfe train prices (media and larga distancia) and get notified when they change.]]></summary>
+        <content type="html"><![CDATA[<p><a href="https://github.com/JavierMonton/renfe-tracker" target="_blank" rel="noopener noreferrer">renfe-tracker</a> is a self-hosted tool I built to track Renfe train prices (media and larga distancia) and get notified when they change.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="why">Why<a href="https://javier.monton.info/blog/renfe-tracker#why" class="hash-link" aria-label="Direct link to Why" title="Direct link to Why">​</a></h2>
+<p>Renfe prices fluctuate a lot, and checking manually every day is tedious. I wanted something that would watch a trip for me and alert me when the price dropped — or before it went up.</p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="what-it-does">What it does<a href="https://javier.monton.info/blog/renfe-tracker#what-it-does" class="hash-link" aria-label="Direct link to What it does" title="Direct link to What it does">​</a></h2>
+<ul>
+<li><strong>Search trains</strong> between stations for a given date, with estimated price ranges based on historical data</li>
+<li><strong>Detect possible trains</strong> — trains expected to appear on your date based on recurring patterns, even before Renfe publishes them</li>
+<li><strong>Track trips</strong> and monitor their prices automatically in the background</li>
+<li><strong>Alert you</strong> when the price changes via email, Telegram, Home Assistant, or browser notifications</li>
+<li><strong>View price history</strong> with a timeline of every price change for a tracked trip</li>
+</ul>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="screenshots">Screenshots<a href="https://javier.monton.info/blog/renfe-tracker#screenshots" class="hash-link" aria-label="Direct link to Screenshots" title="Direct link to Screenshots">​</a></h2>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="search">Search<a href="https://javier.monton.info/blog/renfe-tracker#search" class="hash-link" aria-label="Direct link to Search" title="Direct link to Search">​</a></h3>
+<p><img loading="lazy" alt="Search" src="https://javier.monton.info/assets/images/search-screenshot-85a8c59a44e06911d55090d5e57103c7.png" width="1343" height="1276" class="img_ev3q"></p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="tracked-trips">Tracked trips<a href="https://javier.monton.info/blog/renfe-tracker#tracked-trips" class="hash-link" aria-label="Direct link to Tracked trips" title="Direct link to Tracked trips">​</a></h3>
+<p><img loading="lazy" alt="Trips" src="https://javier.monton.info/assets/images/trips-screenshot-4b7bde8510e6abd07ceed65a8517e3c1.png" width="1298" height="1176" class="img_ev3q"></p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="price-history">Price history<a href="https://javier.monton.info/blog/renfe-tracker#price-history" class="hash-link" aria-label="Direct link to Price history" title="Direct link to Price history">​</a></h3>
+<p><img loading="lazy" alt="Price history" src="https://javier.monton.info/assets/images/prices-screenshot-92a348eb317bbc95c77d274eb284fe77.png" width="1319" height="745" class="img_ev3q"></p>
+<h3 class="anchor anchorWithStickyNavbar_LWe7" id="notifications">Notifications<a href="https://javier.monton.info/blog/renfe-tracker#notifications" class="hash-link" aria-label="Direct link to Notifications" title="Direct link to Notifications">​</a></h3>
+<p><img loading="lazy" alt="Notifications" src="https://javier.monton.info/assets/images/notifications-screenshot-b3a6fcda90862fac20cc197f2b722406.png" width="1314" height="919" class="img_ev3q"></p>
+<h2 class="anchor anchorWithStickyNavbar_LWe7" id="getting-started">Getting started<a href="https://javier.monton.info/blog/renfe-tracker#getting-started" class="hash-link" aria-label="Direct link to Getting started" title="Direct link to Getting started">​</a></h2>
+<p>It runs as a single Docker container:</p>
+<div class="language-bash codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_biex"><pre tabindex="0" class="prism-code language-bash codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">curl -o docker-compose.yml https://raw.githubusercontent.com/JavierMonton/renfe-tracker/main/docker-compose.example.yml</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">docker compose up -d</span><br></span></code></pre><div class="buttonGroup__atx"><button type="button" aria-label="Copy code to clipboard" title="Copy" class="clean-btn"><span class="copyButtonIcons_eSgA" aria-hidden="true"><svg viewBox="0 0 24 24" class="copyButtonIcon_y97N"><path fill="currentColor" d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"></path></svg><svg viewBox="0 0 24 24" class="copyButtonSuccessIcon_LjdS"><path fill="currentColor" d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"></path></svg></span></button></div></div></div>
+<p>Then open <a href="http://localhost:8000/" target="_blank" rel="noopener noreferrer">http://localhost:8000</a>.</p>
+<p>Full documentation at <a href="https://javiermonton.github.io/renfe-tracker/" target="_blank" rel="noopener noreferrer">javiermonton.github.io/renfe-tracker</a> and source code on <a href="https://github.com/JavierMonton/renfe-tracker" target="_blank" rel="noopener noreferrer">GitHub</a>.</p>]]></content>
+        <author>
+            <name>Javier Montón</name>
+            <uri>https://github.com/JavierMonton</uri>
+        </author>
+        <category label="renfe" term="renfe"/>
+        <category label="trains" term="trains"/>
+        <category label="self-hosted" term="self-hosted"/>
+        <category label="docker" term="docker"/>
+        <category label="python" term="python"/>
+        <category label="react" term="react"/>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Kafka Streams - Why you should use named state stores]]></title>
         <id>https://javier.monton.info/blog/kafka-streams-state-stores</id>

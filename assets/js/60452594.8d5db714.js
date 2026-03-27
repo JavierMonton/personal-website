@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkwebsite=self.webpackChunkwebsite||[]).push([[5340],{32652:e=>{e.exports=JSON.parse('{"label":"renfe","permalink":"/blog/tags/renfe","allTagsPath":"/blog/tags","count":1,"unlisted":false}')}}]);
