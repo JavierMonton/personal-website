@@ -17,6 +17,7 @@ To reassign partitions to different brokers, you can use the Kafka binaries (`bi
 but it isn't trivial if you have to reassign thousands of topics.
 
 The binary file has three operations: 
+<!-- truncate -->
 - `--generate`. This will generate a plan to reassign partitions.
 - `--execute`. This will execute the plan.
 - `--verify`. This will verify the status of the reassignment.

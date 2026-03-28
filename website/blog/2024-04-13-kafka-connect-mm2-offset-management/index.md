@@ -17,6 +17,8 @@ This post is about Kafka Connect, Mirror Maker 2, how they manage offsets, and h
 When a consumer starts consuming messages from Kafka, it will probably use a `consumer-group` and Kafka will store the 
 offset of the last message consumed by that consumer-group. This offset is stored in a Kafka topic called `__consumer_offsets`.
 
+<!-- truncate -->
+
 By doing this, when the consumer restarts, it can start consuming messages from the last offset it consumed.
 
 There are tools that allow us to manage these offsets, like the binary files provided by Kafka, and in any case, 

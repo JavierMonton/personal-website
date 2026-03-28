@@ -21,6 +21,8 @@ It combines the simplicity of writing and deploying standard Java and Scala appl
 Unlike other stream processing frameworks, Kafka Streams is not a separate processing cluster but a library that runs within your application.
 This means you don't need to set up and manage a separate cluster - your application becomes the stream processing engine.
 
+<!-- truncate -->
+
 Kafka Streams gives you simple operations like:
 - `map` - transform each record
 - `filter` - keep only records that match certain conditions

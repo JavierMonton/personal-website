@@ -16,6 +16,8 @@ For these examples, we are using Confluent's Kafka Connect on its Docker version
 Kafka Connect comes with two modes of execution, single and distributed. The main difference between them is that the single mode runs all the connectors in the same JVM, while the distributed mode runs each connector in its own JVM. The distributed mode is the recommended one for production environments, as it provides better scalability and fault tolerance. 
 In the case of K8s, it means we will be using more than one pod to run Kafka Connect.
 
+<!-- truncate -->
+
 :::warning
 Be aware that these two modes use different class paths, so if you are doing changes inside the docker and you are running the single mode locally but distributed in production, you might have different results.
 I strongly recommend to check manually which are the class paths in each case using something like 

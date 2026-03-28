@@ -2,7 +2,7 @@
 slug: renfe-tracker
 title: renfe-tracker - Monitor Renfe Train Prices
 authors: javier
-tags: [renfe, trains, self-hosted, docker, python, react]
+tags: [renfe, trains, self-hosted, docker, react]
 ---
 
 [renfe-tracker](https://github.com/JavierMonton/renfe-tracker) is a self-hosted tool I built to track Renfe train prices (media and larga distancia) and get notified when they change.

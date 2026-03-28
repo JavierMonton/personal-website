@@ -21,6 +21,8 @@ value.converter=io.confluent.connect.protobuf.ProtobufConverter
 value.converter.schema.registry.url=http://localhost:8081
 ```
 
+<!-- truncate -->
+
 If you use this in a Sink connector, Kafka Connect will understand how to deserialize the Protobuf message in Kafka, but how will it write it to the sink?
 
 If you enable this in a Source connector, Kafka Connect will be able to serialize the message to Protobuf, but what was it expecting from the Source?

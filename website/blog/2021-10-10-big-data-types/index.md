@@ -20,6 +20,7 @@ it can convert between multiple types without having any code relating them. In 
 As an example, let's say we have a generic type called `Generic`. Now we want to convert from type `A` to type `B`. 
 If we implement the conversion from `A` to `Generic` and the conversion from `Generic` to `B`, automatically we can convert from `A` to `B` although there is no single line of code mixing `A` and `B`.
 
+<!-- truncate -->
 
 We can also do the opposite, we can convert from `B` to `A` by implementing the conversion from `B` to `Generic` and the conversion from `Generic` to `A`. Now we can convert between `A` and `B` as we wish.
 
