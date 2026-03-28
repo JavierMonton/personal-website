@@ -46,7 +46,6 @@
         <category label="trains" term="trains"/>
         <category label="self-hosted" term="self-hosted"/>
         <category label="docker" term="docker"/>
-        <category label="python" term="python"/>
         <category label="react" term="react"/>
     </entry>
     <entry>
