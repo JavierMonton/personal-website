@@ -157,6 +157,10 @@ const config = {
                 label: 'Milpartituras.com',
                 href: 'https://milpartituras.com',
               },
+              {
+                label: 'CompleteProteinCalculator.com',
+                href: 'https://completeproteincalculator.com',
+              },
             ],
           },
         ],
