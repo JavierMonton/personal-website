@@ -149,6 +149,10 @@ const config = {
                 href: 'https://github.com/JavierMonton/renfe-tracker/',
               },
               {
+                label: 'Orthonaut',
+                href: 'https://github.com/JavierMonton/orthonaut',
+              },
+              {
                 label: 'GNOME Window Resizer',
                 href: 'https://github.com/JavierMonton/gnome-window-resizer',
               },
