@@ -164,6 +164,10 @@ const config = {
                 label: 'CompleteProteinCalculator.com',
                 href: 'https://completeproteincalculator.com',
               },
+              {
+                label: 'PsiBike',
+                href: 'https://psibike.com',
+              },
             ],
           },
         ],
